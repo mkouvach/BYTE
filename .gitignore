@@ -1,0 +1,12 @@
+# CodeBlocks
+*.layout
+*.depend
+bin/
+obj/
+
+# Compilados
+*.o
+*.exe
+
+# Imágenes de salida
+BYTE_*.bmp
