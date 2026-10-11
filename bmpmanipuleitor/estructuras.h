@@ -4,6 +4,7 @@
 typedef struct
 {
     unsigned char pixel[3];
+
 }t_pixel;
 
 typedef struct
