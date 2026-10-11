@@ -2,6 +2,18 @@
 #include <stdlib.h>
 #include "compartido.h"
 
+
+void liberarMatriz(t_pixel **mat,size_t cf)
+{
+    for(int i=0; i<cf; i++)
+    {
+        free(*(mat+i));
+    }
+
+    free(mat);
+
+}
+
 t_pixel **crearMatrizDinamica(size_t cf,size_t cc)
 {
     t_pixel **mat=malloc( cf* sizeof(t_pixel *)); //Reserva vector de punteros
@@ -30,13 +42,15 @@ t_pixel **crearMatrizDinamica(size_t cf,size_t cc)
 
 }
 
-void liberarMatriz(t_pixel **mat,size_t cf)
+int calcular_padding(int ancho)
 {
-    for(int i=0; i<cf; i++)
+    int bytes_fila = ancho * sizeof(t_pixel); // 3 bytes
+    int resto = bytes_fila % 4;
+
+    if (resto == 0)
     {
-        free(*(mat+i));
+        return 0; // Multiplo de 4, no necesita padding
     }
 
-    free(mat);
-
+    return 4 - resto; // Agregamos padding
 }

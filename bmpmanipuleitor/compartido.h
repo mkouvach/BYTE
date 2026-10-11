@@ -2,11 +2,27 @@
 #define COMPARTIDO_H_INCLUDED
 #include <stdio.h>
 #include <stdlib.h>
-#include "estructuras.h"
+
+typedef struct
+{
+    unsigned char pixel[3];
+
+}t_pixel;
+
+typedef struct
+{
+    unsigned int tamArchivo;
+    unsigned int tamEncabezado;
+    unsigned int ancho;
+    unsigned int alto;
+    unsigned short profundidad;
+
+}t_metadata;
 
 
-t_pixel **crearMatrizDinamica(size_t cf,size_t cc);
 void liberarMatriz(t_pixel **mat,size_t cf);
+t_pixel **crearMatrizDinamica(size_t cf,size_t cc);
+int calcular_padding(int ancho);
 
 
 
