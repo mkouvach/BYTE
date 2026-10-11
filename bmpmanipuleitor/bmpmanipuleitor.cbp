@@ -35,7 +35,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="compartido.h" />
-		<Unit filename="estructuras.h" />
 		<Unit filename="funciones_alvarezdasilva.c">
 			<Option compilerVar="CC" />
 		</Unit>

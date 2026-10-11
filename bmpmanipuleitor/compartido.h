@@ -22,7 +22,9 @@ typedef struct
 
 void liberarMatriz(t_pixel **mat,size_t cf);
 t_pixel **crearMatrizDinamica(size_t cf,size_t cc);
-int calcular_padding(int ancho);
+int calcularPadding(int ancho);
+int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen);
+
 
 
 
