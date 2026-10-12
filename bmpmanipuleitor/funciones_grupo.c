@@ -17,19 +17,45 @@
     DNI: 45013925
     Entrega: Sí
     -----------------
-	Apellido: Rodriguez
+    Apellido: Rodriguez
     Nombre: Lautaro David
     DNI: 45349281
     Entrega: Sí
     -----------------
 */
-
 #include "funciones_grupo.h"
+#include "compartido.h"
 
-int solucion(int argc, char* argv[])
+int solucion(int argc, char *argv[])
 {
-    /*
-        Aquí deben hacer el código que solucione lo solicitado.
-	*/
-    return 0;
+    t_metadata infoMeta;
+    t_pixel** mat = NULL;
+
+    // Para una primera prueba rápida, leemos la imagen que pasaron por argumento (o una fija de prueba)
+    if (argc < 2)
+    {
+        printf("Uso: %s <imagen.bmp>\n", argv[0]);
+        return 1;
+    }
+    const char* ruta_origen = argv[1];
+
+    if(leerBmp(ruta_origen, &infoMeta, &mat) == 0)
+    {
+        printf("Error en la lectura de la imagen\n");
+        return 0;
+    }
+
+    printf("DEBUG: Ancho = %u, Alto = %u\n", infoMeta.ancho, infoMeta.alto);
+
+    if(escribirBmp("copiaUnlam.bmp", &infoMeta, mat) == 0)
+    {
+        printf("Error en la escritura de la imagen\n");
+        return 0;
+    }
+
+    liberarMatriz(mat, infoMeta.alto);
+
+    printf("Imagen leida con exito\n");
+
+    return 1;
 }

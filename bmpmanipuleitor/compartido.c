@@ -9,14 +9,12 @@ void liberarMatriz(t_pixel **mat,size_t cf)
     {
         free(*(mat+i));
     }
-
     free(mat);
-
 }
 
 t_pixel **crearMatrizDinamica(size_t cf,size_t cc)
 {
-    t_pixel **mat=malloc( cf* sizeof(t_pixel *)); //Reserva vector de punteros
+    t_pixel **mat = (t_pixel**)malloc( cf* sizeof(t_pixel *)); //Reserva vector de punteros
 
     if(!mat)
     {
@@ -26,18 +24,14 @@ t_pixel **crearMatrizDinamica(size_t cf,size_t cc)
 
     for(int i=0; i<cf; i++) //Recorremos cada fila
     {
-        *(mat+i)=malloc(cc * sizeof(t_pixel)); //Reserva vector columna
+        *(mat+i) = (t_pixel*)malloc(cc * sizeof(t_pixel)); //Reserva vector columna
 
         if(!*(mat+i))
         {
             liberarMatriz(mat,i); //Libera memoria hasta la fila que fallo
             return NULL;
         }
-
-
     }
-
-
     return mat;
 
 }
@@ -139,11 +133,97 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
 
     }
 
-
     fclose(bmp);
     return 1; //Se leyó correctamente la imagen
 
 }
+
+int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
+{
+    FILE* bmp = fopen(ruta, "wb");
+    if(!bmp)
+    {
+        printf("No se pudo abrir el archivo %s.\n", ruta);
+        return 0;
+    }
+    //Realizamos el padding
+    int padding=calcularPadding(infoBmp->ancho);
+
+    //Calculamos el tamaño total de la fila en bytes
+    int tamFil=(infoBmp->ancho * sizeof(t_pixel) + padding);
+
+    //Calculamos el tamaño total de la imagen
+    unsigned int tamDatosImg=(tamFil * infoBmp->alto);
+
+    //Calculamos el tamaño total del archivo
+    int tamArch=(54 + tamDatosImg);
+
+    //Escribimos el tipo de archivo
+    char tipo[2]={'B','M'};
+    fwrite(tipo, sizeof(char), 2, bmp);
+
+    //Tamaño del Archivo
+    fwrite(&tamArch, sizeof(unsigned int), 1, bmp);
+
+    //Definimos una variable para escribir Bytes vacios
+    unsigned int reservado=0;
+    fwrite(&reservado, sizeof(unsigned int), 1, bmp);
+
+    //Escribimos el offset
+    unsigned int offset=54;
+    fwrite(&offset, sizeof(unsigned int), 1, bmp);
+
+    //Definimos el tamaño de la cabecera de la imagen
+    unsigned int tamInfo=40;
+    fwrite(&tamInfo, sizeof(unsigned int), 1, bmp);
+
+    //Ancho
+    fwrite(&(infoBmp->ancho), sizeof(unsigned int), 1, bmp);
+
+    //Alto
+    fwrite(&(infoBmp->alto), sizeof(unsigned int), 1, bmp);
+
+    //Número de planos
+    unsigned short planos = 1;
+    fwrite(&planos, sizeof(unsigned short), 1, bmp);
+
+    //Profundidad (tamaño de cada punto)
+    unsigned short profundidad = 24;
+    fwrite(&profundidad, sizeof(unsigned short), 1, bmp);
+
+    //Compresion
+    unsigned int compresion = 0;
+    fwrite(&compresion, sizeof(unsigned int), 1, bmp);
+
+    //Tamaño de imagen
+    fwrite(&tamDatosImg, sizeof(unsigned int), 1, bmp);
+
+    //Escribimos los ultimos 16 bytes
+    unsigned int resto[4]={0,0,0,0};
+    fwrite(resto, sizeof(unsigned int), 4, bmp);
+
+    //Definimos los pixeles
+    unsigned char relleno[3]={0,0,0};
+
+    for(int i = 0; i < infoBmp->alto; i++)
+    {
+        //Escribimos todos los pixeles de una fila en una sola lectura
+        fwrite(*(imagen + i), sizeof(t_pixel), infoBmp->ancho, bmp);
+
+        //Si la fila requiere padding, escribimos los bytes de relleno
+        if(padding > 0)
+        {
+            fwrite(relleno, sizeof(unsigned char), padding, bmp);
+        }
+    }
+    fclose(bmp);
+    return 1; //Se escribió correctamente la imagen
+}
+
+
+
+
+
 
 
 
