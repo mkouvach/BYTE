@@ -110,7 +110,7 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
 
     //Creamos la matriz dinámica de pixeles
     *imagen = crearMatrizDinamica(infoBmp->alto, infoBmp->ancho);
-    if(!imagen)
+    if(!*imagen)
     {
         fclose(bmp);
         return 0;
@@ -123,7 +123,7 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
     for(int i = 0; i < infoBmp->alto; i++)
     {
         //Leemos todos los pixeles de una fila en una sola lectura
-        fread(*(imagen + i), sizeof(t_pixel), infoBmp->ancho, bmp);
+        fread(*(*imagen + i), sizeof(t_pixel), infoBmp->ancho, bmp);
 
         //Si la imagen tiene padding, saltamos bytes de relleno
         if(padding > 0)
@@ -156,7 +156,7 @@ int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
     unsigned int tamDatosImg=(tamFil * infoBmp->alto);
 
     //Calculamos el tamaño total del archivo
-    int tamArch=(54 + tamDatosImg);
+    unsigned int tamArch=(54 + tamDatosImg);
 
     //Escribimos el tipo de archivo
     char tipo[2]={'B','M'};
@@ -220,6 +220,14 @@ int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
     return 1; //Se escribió correctamente la imagen
 }
 
+unsigned char limitarColor(int num)
+{
+    if(num>255)
+        num=255;
+    if(num<0)
+        num=0;
+    return num;
+}
 
 
 

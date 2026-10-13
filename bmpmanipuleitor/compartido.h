@@ -3,6 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define AZUL  0
+#define VERDE 1
+#define ROJO  2
+
 typedef struct
 {
     unsigned char pixel[3];
@@ -26,6 +30,7 @@ int calcularPadding(int ancho);
 int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen);
 int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen);
 
+unsigned char limitarColor(int num);
 
 
 
