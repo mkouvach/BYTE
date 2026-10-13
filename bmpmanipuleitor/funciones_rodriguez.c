@@ -42,3 +42,37 @@ void aumentarContraste(t_pixel **mat, int alto, int ancho, int porcentaje)
     }
 }
 
+//Reducir contraste
+void reducirContraste(t_pixel **mat, int alto, int ancho, int porcentaje)
+{
+    int i,j;
+    float factor = 1 - porcentaje / 100.0;
+    for(i=0;i<alto;i++)
+    {
+        for(j=0;j<ancho;j++)
+        {
+            mat[i][j].pixel[ROJO] = 128 + (mat[i][j].pixel[ROJO] - 128) * factor;
+            mat[i][j].pixel[AZUL] = 128 + (mat[i][j].pixel[AZUL] - 128) * factor;
+            mat[i][j].pixel[VERDE] = 128 + (mat[i][j].pixel[VERDE] - 128) * factor;
+        }
+    }
+}
+
+//Espejar horizontal
+void espejarHorizontal(t_pixel **mat, int alto, int ancho)
+{
+    t_pixel aux, *fila;
+    for(int i=0;i<alto;i++)
+    {
+        fila = *(mat+i);
+
+        for(int j=0; j<ancho/2; j++)
+        {
+            int colOpuesta = ancho - 1 - j;
+
+            aux = *(fila+j);
+            *(fila + j) = *(fila + colOpuesta);
+            *(fila + colOpuesta) = aux;
+        }
+    }
+}
