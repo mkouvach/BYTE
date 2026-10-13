@@ -1,22 +1,6 @@
 #include "funciones_rodriguez.h"
 #include "compartido.h"
 
-//PRUEBA
-void todoRojo(t_pixel **mat, int alto, int ancho)
-{
-    int i,j;
-
-    for(i=0;i<alto;i++)
-    {
-        for(j=0;j<ancho;j++)
-        {
-            mat[i][j].pixel[ROJO]=255;
-            mat[i][j].pixel[AZUL]=0;
-            mat[i][j].pixel[VERDE]=0;
-        }
-    }
-}
-
 //ESCALA DE GRISES
 void escalaDeGrises(t_pixel **mat, int alto, int ancho)
 {

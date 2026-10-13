@@ -29,7 +29,6 @@ t_pixel **crearMatrizDinamica(size_t cf,size_t cc);
 int calcularPadding(int ancho);
 int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen);
 int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen);
-
 unsigned char limitarColor(int num);
 
 

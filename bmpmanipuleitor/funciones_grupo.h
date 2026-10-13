@@ -9,5 +9,4 @@
 int solucion(int argc, char* argv[]);
 
 
-
 #endif // FUNCIONES_GRUPO_H_INCLUDED

@@ -45,10 +45,6 @@ int solucion(int argc, char *argv[])
         return 0;
     }
 
-    todoRojo(mat, infoMeta.alto, infoMeta.ancho);
-    //escalaDeGrises(mat, infoMeta.alto, infoMeta.ancho);
-    //aumentarContraste(mat, infoMeta.alto, infoMeta.ancho, 50);
-
     printf("DEBUG: Ancho = %u, Alto = %u\n", infoMeta.ancho, infoMeta.alto);
 
     if(escribirBmp("copiaUnlam.bmp", &infoMeta, mat) == 0)
