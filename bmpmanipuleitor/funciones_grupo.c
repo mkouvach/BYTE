@@ -47,13 +47,14 @@ int solucion(int argc, char *argv[])
 
     printf("DEBUG: Ancho = %u, Alto = %u\n", infoMeta.ancho, infoMeta.alto);
 
-    if(escribirBmp("copiaUnlam.bmp", &infoMeta, mat) == 0)
+    if(escribirBmp("copiaUnlam.bmp", &metaRecorte, matRecortada) == 0)
     {
         printf("Error en la escritura de la imagen\n");
         return 0;
     }
 
     liberarMatriz(mat, infoMeta.alto);
+
 
     printf("Imagen leida con exito\n");
 
