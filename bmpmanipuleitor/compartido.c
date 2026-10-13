@@ -5,10 +5,13 @@
 
 void liberarMatriz(t_pixel **mat,size_t cf)
 {
+    if(mat == NULL) return; // <-- Evita crasheos si la matriz no se creó
+
     for(int i=0; i<cf; i++)
     {
         free(*(mat+i));
     }
+
     free(mat);
 }
 
@@ -48,7 +51,6 @@ int calcularPadding(int ancho)
 
     return 4 - resto; // Agregamos padding
 }
-
 
 int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
 {
@@ -122,8 +124,7 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
     //Leemos la matriz de pixeles
     for(int i = 0; i < infoBmp->alto; i++)
     {
-        //Leemos todos los pixeles de una fila en una sola lectura
-        fread(*(*imagen + i), sizeof(t_pixel), infoBmp->ancho, bmp);
+        fread(*((*imagen) + i), sizeof(t_pixel), infoBmp->ancho, bmp);
 
         //Si la imagen tiene padding, saltamos bytes de relleno
         if(padding > 0)
@@ -159,7 +160,7 @@ int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
     unsigned int tamArch=(54 + tamDatosImg);
 
     //Escribimos el tipo de archivo
-    char tipo[2]={'B','M'};
+    char tipo[2]= {'B','M'};
     fwrite(tipo, sizeof(char), 2, bmp);
 
     //Tamaño del Archivo
@@ -199,11 +200,11 @@ int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
     fwrite(&tamDatosImg, sizeof(unsigned int), 1, bmp);
 
     //Escribimos los ultimos 16 bytes
-    unsigned int resto[4]={0,0,0,0};
+    unsigned int resto[4]= {0,0,0,0};
     fwrite(resto, sizeof(unsigned int), 4, bmp);
 
     //Definimos los pixeles
-    unsigned char relleno[3]={0,0,0};
+    unsigned char relleno[3]= {0,0,0};
 
     for(int i = 0; i < infoBmp->alto; i++)
     {
