@@ -230,8 +230,34 @@ unsigned char limitarColor(int num)
     return num;
 }
 
+void inicializarConfig(t_config* config)
+{
+    config->cantImagenes = 0;
+    config->rutaImg1[0] = '\0';
+    config->rutaImg2[0] = '\0';
 
+    // Banderas en 0
 
+    config->negativo = 0;
+    config->escalaGrises = 0;
+    config->espejarHorizontal = 0;
+    config->espejarVertical = 0;
+    config->rotarDerecha = 0;
+    config->rotarIzquierda = 0;
+    config->concatenarHorizontal = 0;
+    config->concatenarVertical = 0;
+    config->comodin = 0;
+
+    // Valores en -1 (no solicitados)
+
+    config->aumentarContraste = -1;
+    config->reducirContraste = -1;
+    config->tonalidadAzul = -1;
+    config->tonalidadVerde = -1;
+    config->tonalidadRoja = -1;
+    config->recortar = -1;
+    config->achicar = -1;
+}
 
 
 

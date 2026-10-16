@@ -23,6 +23,35 @@ typedef struct
 
 }t_metadata;
 
+typedef struct
+{
+    // Rutas de las imágenes
+
+    char rutaImg1[256];
+    char rutaImg2[256];
+    int cantImagenes;
+
+    // Filtros sin parámetros (0 = no solicitado, 1 = solicitado)
+    int negativo;
+    int escalaGrises;
+    int espejarHorizontal;
+    int espejarVertical;
+    int rotarDerecha;
+    int rotarIzquierda;
+    int concatenarHorizontal;
+    int concatenarVertical;
+    int comodin;
+
+    // Filtros con porcentaje (valor de 0 a 100 y -1 no solicitado)
+    int aumentarContraste;
+    int reducirContraste;
+    int tonalidadAzul;
+    int tonalidadVerde;
+    int tonalidadRoja;
+    int recortar;
+    int achicar;
+
+} t_config;
 
 void liberarMatriz(t_pixel **mat,size_t cf);
 t_pixel **crearMatrizDinamica(size_t cf,size_t cc);
