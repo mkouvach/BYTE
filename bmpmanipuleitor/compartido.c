@@ -3,21 +3,21 @@
 #include "compartido.h"
 
 
-void liberarMatriz(t_pixel **mat,size_t cf)
+void liberarMatriz(t_pixel **mat, size_t cf)
 {
     if(mat == NULL) return; // <-- Evita crasheos si la matriz no se creó
 
     for(int i=0; i<cf; i++)
     {
-        free(*(mat+i));
+        free(*(mat + i));
     }
 
     free(mat);
 }
 
-t_pixel **crearMatrizDinamica(size_t cf,size_t cc)
+t_pixel **crearMatrizDinamica(size_t cf, size_t cc)
 {
-    t_pixel **mat = (t_pixel**)malloc( cf* sizeof(t_pixel *)); //Reserva vector de punteros
+    t_pixel **mat = (t_pixel**)malloc(cf* sizeof(t_pixel *)); //Reserva vector de punteros
 
     if(!mat)
     {
@@ -27,11 +27,11 @@ t_pixel **crearMatrizDinamica(size_t cf,size_t cc)
 
     for(int i=0; i<cf; i++) //Recorremos cada fila
     {
-        *(mat+i) = (t_pixel*)malloc(cc * sizeof(t_pixel)); //Reserva vector columna
+        *(mat + i) = (t_pixel*)malloc(cc * sizeof(t_pixel)); //Reserva vector columna
 
-        if(!*(mat+i))
+        if(!*(mat + i))
         {
-            liberarMatriz(mat,i); //Libera memoria hasta la fila que fallo
+            liberarMatriz(mat, i); //Libera memoria hasta la fila que fallo
             return NULL;
         }
     }
@@ -148,26 +148,26 @@ int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
         return 0;
     }
     //Realizamos el padding
-    int padding=calcularPadding(infoBmp->ancho);
+    int padding = calcularPadding(infoBmp->ancho);
 
     //Calculamos el tamaño total de la fila en bytes
-    int tamFil=(infoBmp->ancho * sizeof(t_pixel) + padding);
+    int tamFil = (infoBmp->ancho * sizeof(t_pixel) + padding);
 
     //Calculamos el tamaño total de la imagen
-    unsigned int tamDatosImg=(tamFil * infoBmp->alto);
+    unsigned int tamDatosImg = (tamFil * infoBmp->alto);
 
     //Calculamos el tamaño total del archivo
-    unsigned int tamArch=(54 + tamDatosImg);
+    unsigned int tamArch = (54 + tamDatosImg);
 
     //Escribimos el tipo de archivo
-    char tipo[2]= {'B','M'};
+    char tipo[2]= {'B', 'M'};
     fwrite(tipo, sizeof(char), 2, bmp);
 
     //Tamaño del Archivo
     fwrite(&tamArch, sizeof(unsigned int), 1, bmp);
 
     //Definimos una variable para escribir Bytes vacios
-    unsigned int reservado=0;
+    unsigned int reservado = 0;
     fwrite(&reservado, sizeof(unsigned int), 1, bmp);
 
     //Escribimos el offset
@@ -175,7 +175,7 @@ int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
     fwrite(&offset, sizeof(unsigned int), 1, bmp);
 
     //Definimos el tamaño de la cabecera de la imagen
-    unsigned int tamInfo=40;
+    unsigned int tamInfo = 40;
     fwrite(&tamInfo, sizeof(unsigned int), 1, bmp);
 
     //Ancho
@@ -200,11 +200,11 @@ int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
     fwrite(&tamDatosImg, sizeof(unsigned int), 1, bmp);
 
     //Escribimos los ultimos 16 bytes
-    unsigned int resto[4]= {0,0,0,0};
+    unsigned int resto[4] = {0,0,0,0};
     fwrite(resto, sizeof(unsigned int), 4, bmp);
 
     //Definimos los pixeles
-    unsigned char relleno[3]= {0,0,0};
+    unsigned char relleno[3] = {0,0,0};
 
     for(int i = 0; i < infoBmp->alto; i++)
     {
@@ -223,13 +223,14 @@ int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
 
 unsigned char limitarColor(int num)
 {
-    if(num>255)
-        num=255;
-    if(num<0)
-        num=0;
+    if(num > 255)
+        num = 255;
+    if(num < 0)
+        num = 0;
     return num;
 }
 
+//Inicializa estructura t_config
 void inicializarConfig(t_config* config)
 {
     config->cantImagenes = 0;
@@ -257,6 +258,35 @@ void inicializarConfig(t_config* config)
     config->tonalidadRoja = -1;
     config->recortar = -1;
     config->achicar = -1;
+}
+
+void extraerNombreBase(const char *ruta, char *destino)
+{
+    char *ultBarra = strrchr(ruta,'/');
+    char *ultBarra1 = strrchr(ruta,'\\'); //Barra invertida '\'
+    const char *ini = ruta;
+
+    //Recorremos rutas inversamente hasta encontrar "/ o \\" y descartamos el resto
+
+    if(ultBarra!=NULL && ultBarra>=ini)
+    {
+        ini = ultBarra + 1;
+    }
+
+    if(ultBarra1!=NULL && ultBarra1>=ini)
+    {
+        ini = ultBarra1 + 1;
+    }
+
+
+    strcpy(destino, ini); //Copiamos nombre archivo con extension .bmp
+
+    char *punto = strrchr(destino, '.'); //Reverse
+
+    if(punto!=NULL)
+    {
+        *punto = '\0'; //Cortamos la cadena en el punto
+    }
 }
 
 

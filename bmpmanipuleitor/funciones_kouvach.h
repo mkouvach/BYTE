@@ -3,8 +3,8 @@
 
 #include "compartido.h"
 
-void espejarVertical(t_pixel **mat,int alto);
-t_pixel** recortarImagen(t_pixel** matOrig,t_metadata* metaOrig, int porcentaje);
+void espejarVertical(t_pixel **mat, int alto);
+t_pixel** recortarImagen(t_pixel** matOrig, t_metadata* metaOrig, int porcentaje);
 
 
 

@@ -2,17 +2,20 @@
 #define COMPARTIDO_H_INCLUDED
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define AZUL  0
 #define VERDE 1
 #define ROJO  2
 
+//Estructura para manejar cada pixel
 typedef struct
 {
     unsigned char pixel[3];
 
 }t_pixel;
 
+//Estructura para guardar informacion del archivo bmp
 typedef struct
 {
     unsigned int tamArchivo;
@@ -23,6 +26,8 @@ typedef struct
 
 }t_metadata;
 
+
+//Estructura para interpretar argumentos y su posterior llamado a funciones
 typedef struct
 {
     // Rutas de las imágenes
@@ -53,12 +58,16 @@ typedef struct
 
 } t_config;
 
-void liberarMatriz(t_pixel **mat,size_t cf);
-t_pixel **crearMatrizDinamica(size_t cf,size_t cc);
+
+void liberarMatriz(t_pixel **mat, size_t cf);
+t_pixel **crearMatrizDinamica(size_t cf, size_t cc);
 int calcularPadding(int ancho);
 int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen);
 int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen);
 unsigned char limitarColor(int num);
+void inicializarConfig(t_config* config);
+void extraerNombreBase(const char *ruta, char *destino);
+
 
 
 

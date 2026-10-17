@@ -1,23 +1,25 @@
 #include "funciones_kouvach.h"
 #include "compartido.h"
 
-void espejarVertical(t_pixel **mat,int alto)
+//ESPEJAR VERTICAL
+void espejarVertical(t_pixel **mat, int alto)
 {
 
-    for(int i=0;i<alto/2;i++) //Recorremos hasta la mitad de la matriz
+    for(int i=0; i<alto/2; i++) //Recorremos hasta la mitad de la matriz
     {
         //Realizamos intercambio de punteros a filas completas
 
-        int filaOpuesta=alto-1-i;
+        int filaOpuesta = alto - 1 - i;
 
-        t_pixel* aux =*(mat+i);
-        *(mat+i) = *(mat+filaOpuesta);
-        *(mat+filaOpuesta) = aux;
+        t_pixel* aux = *(mat + i);
+        *(mat+i) = *(mat + filaOpuesta);
+        *(mat + filaOpuesta) = aux;
 
     }
 
 }
 
+//RECORTAR (PORCENTAJE)
 t_pixel** recortarImagen(t_pixel** matOrig, t_metadata* metaOrig, int porcentaje)
 {
     //Calculamos nuevo ancho y alto
@@ -53,3 +55,8 @@ t_pixel** recortarImagen(t_pixel** matOrig, t_metadata* metaOrig, int porcentaje
 
 
 }
+
+
+//ROTAR DERECHA
+
+//ROTAR IZQUIERDA
