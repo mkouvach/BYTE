@@ -37,7 +37,6 @@ int solucion(int argc, char *argv[])
         return 0;
     }
 
-
     if(escribirBmp("copiaUnlam.bmp", &infoMeta, mat) == 0)
     {
         printf("Error en la escritura de la imagen\n");

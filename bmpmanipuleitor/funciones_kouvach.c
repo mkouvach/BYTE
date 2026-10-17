@@ -1,23 +1,25 @@
 #include "funciones_kouvach.h"
 #include "compartido.h"
 
-void espejarVertical(t_pixel **mat,int alto)
+//ESPEJAR VERTICAL
+void espejarVertical(t_pixel **mat, int alto)
 {
 
     for(int i=0; i<alto/2; i++) //Recorremos hasta la mitad de la matriz
     {
         //Realizamos intercambio de punteros a filas completas
 
-        int filaOpuesta=alto-1-i;
+        int filaOpuesta = alto - 1 - i;
 
-        t_pixel* aux =*(mat+i);
-        *(mat+i) = *(mat+filaOpuesta);
-        *(mat+filaOpuesta) = aux;
+        t_pixel* aux = *(mat + i);
+        *(mat + i) = *(mat + filaOpuesta);
+        *(mat + filaOpuesta) = aux;
 
     }
 
 }
 
+//RECORTAR (PORCENTAJE)
 t_pixel** recortarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metadata* metaNueva, int porcentaje)
 {
 
@@ -26,6 +28,7 @@ t_pixel** recortarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metada
     *metaNueva = *metaOrig;
 
     //Calculamos nuevo ancho y alto
+
 
     //Chequeamos validacion con porcentaje 0
 
@@ -48,7 +51,7 @@ t_pixel** recortarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metada
 
     if(!nuevaMat)
     {
-        printf("Error al crear nueva matriz.\n");
+        printf("Error: Falló la asignación de memoria para crear la matriz.\n");
         return NULL;
     }
 
@@ -56,7 +59,7 @@ t_pixel** recortarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metada
     {
         for(int j=0; j<metaNueva->ancho; j++)
         {
-            nuevaMat[i][j]=matOrig[i][j]; //Intercambiamos contenido de matrices
+            nuevaMat[i][j] = matOrig[i][j]; //Intercambiamos contenido de matrices
         }
 
     }
@@ -65,3 +68,7 @@ t_pixel** recortarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metada
     return nuevaMat;
 
 }
+
+//ROTAR DERECHA
+
+//ROTAR IZQUIERDA
