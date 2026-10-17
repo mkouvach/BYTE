@@ -4,7 +4,7 @@
 void espejarVertical(t_pixel **mat,int alto)
 {
 
-    for(int i=0;i<alto/2;i++) //Recorremos hasta la mitad de la matriz
+    for(int i=0; i<alto/2; i++) //Recorremos hasta la mitad de la matriz
     {
         //Realizamos intercambio de punteros a filas completas
 
@@ -18,16 +18,33 @@ void espejarVertical(t_pixel **mat,int alto)
 
 }
 
-t_pixel** recortarImagen(t_pixel** matOrig, t_metadata* metaOrig, int porcentaje)
+t_pixel** recortarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metadata* metaNueva, int porcentaje)
 {
+
+    // Copiamos todos los datos base de la original
+
+    *metaNueva = *metaOrig;
+
     //Calculamos nuevo ancho y alto
 
-    int nuevoAlto=(metaOrig->alto*porcentaje)/100;
-    int nuevoAncho=(metaOrig->ancho*porcentaje)/100;
+    //Chequeamos validacion con porcentaje 0
+
+    if(porcentaje==0)
+    {
+        metaNueva->alto=metaOrig->alto;
+        metaNueva->ancho=metaOrig->ancho;
+
+    }else
+    {
+        metaNueva->ancho = (metaOrig->ancho * porcentaje) / 100;
+        metaNueva->alto = (metaOrig->alto * porcentaje) / 100;
+
+    }
+
 
     //Creamos matriz nueva mas chica
 
-    t_pixel **nuevaMat=crearMatrizDinamica(nuevoAlto,nuevoAncho);
+    t_pixel **nuevaMat=crearMatrizDinamica(metaNueva->alto,metaNueva->ancho);
 
     if(!nuevaMat)
     {
@@ -35,21 +52,16 @@ t_pixel** recortarImagen(t_pixel** matOrig, t_metadata* metaOrig, int porcentaje
         return NULL;
     }
 
-    for(int i=0;i<nuevoAlto;i++)
+    for(int i=0; i<metaNueva->alto; i++)
     {
-        for(int j=0;j<nuevoAncho;j++)
+        for(int j=0; j<metaNueva->ancho; j++)
         {
             nuevaMat[i][j]=matOrig[i][j]; //Intercambiamos contenido de matrices
         }
 
     }
 
-    //Actualizamos ancho y alto en la estructura
-
-    metaOrig->alto=nuevoAlto;
-    metaOrig->ancho=nuevoAncho;
 
     return nuevaMat;
-
 
 }

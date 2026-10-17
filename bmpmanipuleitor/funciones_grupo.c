@@ -31,23 +31,14 @@ int solucion(int argc, char *argv[])
     t_metadata infoMeta;
     t_pixel** mat = NULL;
 
-    // Para una primera prueba rápida, leemos la imagen que pasaron por argumento (o una fija de prueba)
-    if (argc < 2)
-    {
-        printf("Uso: %s <imagen.bmp>\n", argv[0]);
-        return 1;
-    }
-    const char* ruta_origen = argv[1];
-
     if(leerBmp(ruta_origen, &infoMeta, &mat) == 0)
     {
         printf("Error en la lectura de la imagen\n");
         return 0;
     }
 
-    printf("DEBUG: Ancho = %u, Alto = %u\n", infoMeta.ancho, infoMeta.alto);
 
-    if(escribirBmp("copiaUnlam.bmp", &metaRecorte, matRecortada) == 0)
+    if(escribirBmp("copiaUnlam.bmp", &infoMeta, mat) == 0)
     {
         printf("Error en la escritura de la imagen\n");
         return 0;

@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "compartido.h"
 
 
@@ -229,6 +227,10 @@ unsigned char limitarColor(int num)
         num=0;
     return num;
 }
+
+
+
+
 
 
 
