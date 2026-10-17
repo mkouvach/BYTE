@@ -65,6 +65,7 @@ int calcularPadding(int ancho);
 int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen);
 int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen);
 unsigned char limitarColor(int num);
+void inicializarMetadata(t_metadata* meta, unsigned int ancho, unsigned int alto);
 void inicializarConfig(t_config* config);
 void extraerNombreBase(const char *ruta, char *destino);
 

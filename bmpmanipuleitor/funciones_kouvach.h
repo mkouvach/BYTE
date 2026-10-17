@@ -1,6 +1,5 @@
 #ifndef FUNCIONES_KOUVACH_H_INCLUDED
 #define FUNCIONES_KOUVACH_H_INCLUDED
-
 #include "compartido.h"
 
 void espejarVertical(t_pixel **mat, int alto);

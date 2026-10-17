@@ -230,6 +230,15 @@ unsigned char limitarColor(int num)
     return num;
 }
 
+void inicializarMetadata(t_metadata* meta, unsigned int ancho, unsigned int alto)
+{
+    meta->ancho = ancho;
+    meta->alto = alto;
+    meta->profundidad = 24;
+    meta->tamEncabezado = 54;
+    meta->tamArchivo = 54 + (ancho * 3 * calcularPadding(ancho)) * alto;
+}
+
 //Inicializa estructura t_config
 void inicializarConfig(t_config* config)
 {
@@ -260,6 +269,7 @@ void inicializarConfig(t_config* config)
     config->achicar = -1;
 }
 
+//Limpia la ruta de la imagen
 void extraerNombreBase(const char *ruta, char *destino)
 {
     char *ultBarra = strrchr(ruta,'/');
