@@ -238,6 +238,7 @@ void inicializarMetadata(t_metadata* meta, unsigned int ancho, unsigned int alto
 }
 
 //Inicializa estructura t_config
+
 void inicializarConfig(t_config* config)
 {
     config->cantImagenes = 0;
@@ -268,6 +269,7 @@ void inicializarConfig(t_config* config)
 }
 
 //Limpia la ruta de la imagen
+
 void extraerNombreBase(const char *ruta, char *destino)
 {
     char *ultBarra = strrchr(ruta,'/');
@@ -295,6 +297,163 @@ void extraerNombreBase(const char *ruta, char *destino)
     {
         *punto = '\0'; //Cortamos la cadena en el punto
     }
+}
+
+int parsearArgumentos(int argc, char *argv[], t_config *config)
+{
+
+    for(int i=1; i<argc; i++)
+    {
+
+        char *pArgv = *(argv+i);
+
+        // Preguntamos si es una ruta de imagen, es decir, que no arranquen en "--"
+
+        if(pArgv!='-'||(pArgv+1)!='-')
+        {
+
+            //Es una ruta de imagen
+
+            if(config->cantImagenes==0)
+            {
+                strcpy(config->rutaImg1,pArgv);
+                config->cantImagenes++;
+            }
+
+            else if(config->cantImagenes==1)
+            {
+                strcpy(config->rutaImg2,pArgv);
+                config->cantImagenes++;
+            }
+            else
+            {
+                printf("Limite de imagenes superado, la imagen %s sera ignorada.\n",pArgv);
+            }
+
+        }
+
+        else
+
+        {
+            //Arranca con "--"
+
+            char *igual=strchr(pArgv,'=');
+
+            if(igual!=NULL)
+            {
+                //Es un filtro de porcentaje
+
+                int valor=atoi(igual+1);
+
+                if(valor >= 0 && valor <= 100) //Validamos rango porcentaje
+                {
+
+                    if (strncmp(pArgv, "--aumentar-contraste=", 21) == 0)
+                    {
+                        config->aumentarContraste = valor;
+                    }
+                    else if (strncmp(pArgv, "--reducir-contraste=", 20) == 0)
+                    {
+                        config->reducirContraste = valor;
+                    }
+                    else if (strncmp(pArgv, "--tonalidad-azul=", 17) == 0)
+                    {
+                        config->tonalidadAzul = valor;
+                    }
+                    else if (strncmp(pArgv, "--tonalidad-verde=", 18) == 0)
+                    {
+                        config->tonalidadVerde = valor;
+                    }
+                    else if (strncmp(pArgv, "--tonalidad-roja=", 17) == 0)
+                    {
+                        config->tonalidadRoja = valor;
+                    }
+                    else if (strncmp(pArgv, "--recortar=", 11) == 0)
+                    {
+                        config->recortar = valor;
+                    }
+                    else if (strncmp(pArgv, "--achicar=", 10) == 0)
+                    {
+                        config->achicar = valor;
+                    }
+                    else
+                    {
+                        printf("Argumento %s no reconocido.\n",pArgv);
+                    }
+
+
+                }
+
+            }
+
+            else
+
+            {
+
+                //Es un filtro simple
+
+                if(strcmp(pArgv,"--negativo")==0)
+                {
+                    config->negativo = 1;
+                }
+                else if(strcmp(pArgv,"--escala-de-grises")==0)
+                {
+                    config->escalaGrises = 1;
+                }
+                else if(strcmp(pArgv,"--espejar-horizontal")==0)
+                {
+                    config->espejarHorizontal = 1;
+                }
+                else if(strcmp(pArgv,"--espejar-vertical")==0)
+                {
+                    config->espejarVertical = 1;
+                }
+                else if(strcmp(pArgv,"--rotar-derecha")==0)
+                {
+                    config->rotarDerecha = 1;
+                }
+                else if(strcmp(pArgv,"--rotar-izquierda")==0)
+                {
+                    config->rotarIzquierda = 1;
+                }
+                else if(strcmp(pArgv,"--concatenar-horizontal")==0)
+                {
+                    config->concatenarHorizontal = 1;
+                }
+                else if(strcmp(pArgv,"--concatenar-vertical")==0)
+                {
+                    config->concatenarVertical = 1;
+                }
+                else if(strcmp(pArgv,"--comodin")==0)
+                {
+                    config->comodin = 1;
+                }
+
+                else
+                {
+                    printf("Argumento %s no reconocido.\n",pArgv);
+                }
+
+            }
+
+        }
+
+    }
+
+
+    //Validamos que exista al menos una imagen
+
+    if(config->cantImagenes==0)
+    {
+        printf("No se cargo ningun archivo BMP.\n");
+        return 0;
+    }
+
+
+
+    return 1;
+
+
 }
 
 

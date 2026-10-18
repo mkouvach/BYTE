@@ -9,6 +9,7 @@
 #define ROJO  2
 
 //Estructura para manejar cada pixel
+
 typedef struct
 {
     unsigned char pixel[3];
@@ -16,6 +17,7 @@ typedef struct
 }t_pixel;
 
 //Estructura para guardar informacion del archivo bmp
+
 typedef struct
 {
     unsigned int tamArchivo;
@@ -27,6 +29,7 @@ typedef struct
 }t_metadata;
 
 //Estructura para interpretar argumentos y su posterior llamado a funciones
+
 typedef struct
 {
     // Rutas de las imágenes
@@ -68,10 +71,7 @@ unsigned char limitarColor(int num);
 void inicializarMetadata(t_metadata* meta, unsigned int ancho, unsigned int alto);
 void inicializarConfig(t_config* config);
 void extraerNombreBase(const char *ruta, char *destino);
-
-
-
-int porcentajeEsCero(unsigned int ancho,unsigned int alto);
+int parsearArgumentos(int argc, char *argv [], t_config *config);
 
 
 

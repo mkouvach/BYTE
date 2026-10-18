@@ -1,9 +1,7 @@
 #include "funciones_alvarezdasilva.h"
 #include "compartido.h"
 
-<<<<<<< HEAD
 
-=======
 //ACHICAR (PORCENTAJE)
 t_pixel** achicarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metadata* metaNueva, int porcentaje)
 {
@@ -51,4 +49,4 @@ t_pixel** achicarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metadat
 //CONCATENAR VERTICAL (2 IMAGENES)
 
 //COMODIN
->>>>>>> main
+
