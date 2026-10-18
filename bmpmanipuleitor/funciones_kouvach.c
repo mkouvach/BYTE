@@ -37,7 +37,8 @@ t_pixel** recortarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metada
         metaNueva->alto=metaOrig->alto;
         metaNueva->ancho=metaOrig->ancho;
 
-    }else
+    }
+    else
     {
         metaNueva->ancho = (metaOrig->ancho * porcentaje) / 100;
         metaNueva->alto = (metaOrig->alto * porcentaje) / 100;
@@ -71,4 +72,75 @@ t_pixel** recortarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metada
 
 //ROTAR DERECHA
 
+t_pixel** rotarDerecha(t_pixel** matOrig, t_metadata* metaOrig,t_metadata* metaNueva)
+{
+
+    //Se intercambian dimensiones
+
+    metaNueva->alto=metaOrig->ancho;
+    metaNueva->ancho=metaOrig->alto;
+
+    t_pixel **nuevaMat=crearMatrizDinamica(metaNueva->alto,metaNueva->ancho);
+
+    if(!nuevaMat)
+    {
+        printf("Error: Falló la asignación de memoria para crear la matriz.\n");
+        return NULL;
+    }
+
+
+    for (int i = 0; i < metaOrig->alto; i++)
+    {
+        for (int j = 0; j < metaOrig->ancho; j++)
+        {
+            int nuevaFila = j;
+            int nuevaCol = (metaOrig->alto - 1) - i;
+
+            nuevaMat[nuevaFila][nuevaCol] = matOrig[i][j];
+        }
+    }
+
+    //Otra opcion hubiera sido trasponer la matriz
+    //Y luego invertir los elementos de cada fila
+
+
+    return nuevaMat;
+
+}
+
 //ROTAR IZQUIERDA
+
+t_pixel** rotarIzquierda(t_pixel** matOrig, t_metadata* metaOrig,t_metadata* metaNueva)
+{
+    //Se intercambian dimensiones
+
+    metaNueva->alto=metaOrig->ancho;
+    metaNueva->ancho=metaOrig->alto;
+
+    t_pixel **nuevaMat=crearMatrizDinamica(metaNueva->alto,metaNueva->ancho);
+
+    if(!nuevaMat)
+    {
+        printf("Error: Falló la asignación de memoria para crear la matriz.\n");
+        return NULL;
+    }
+
+
+    for (int i = 0; i < metaOrig->alto; i++)
+    {
+        for (int j = 0; j < metaOrig->ancho; j++)
+        {
+            int nuevaFila = (metaOrig->ancho - 1) - j;
+            int nuevaCol = i;
+
+            nuevaMat[nuevaFila][nuevaCol] = matOrig[i][j];
+        }
+    }
+
+    //Otra opcion hubiera sido trasponer la matriz
+    //Y luego invertir los elementos de cada columna
+
+
+    return nuevaMat;
+
+}
