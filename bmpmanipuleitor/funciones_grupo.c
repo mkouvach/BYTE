@@ -29,17 +29,25 @@
 int solucion(int argc, char *argv[])
 {
     t_metadata infoMeta;
+    t_config config;
     t_pixel** mat = NULL;
 
-    // Para una primera prueba rápida, leemos la imagen que pasaron por argumento (o una fija de prueba)
-    if (argc < 2)
-    {
-        printf("Uso: %s <imagen.bmp>\n", argv[0]);
-        return 1;
-    }
-    const char* ruta_origen = argv[1];
+    inicializarConfig(&config);
 
-    if(leerBmp(ruta_origen, &infoMeta, &mat) == 0)
+    if(!parsearArgumentos(argc,argv,&config))
+    {
+        return 0; //Algo fallo en el parser
+    }
+
+    //Una vez que el parser ya nos devolvio todos los filtros, imagenes etc
+
+    //LOGICA PARA IR PREGUNTANDO POR CADA FILTRO E IR DESGLOSANDO TODO
+
+
+
+    //////////////////////////
+
+    if(leerBmp(config.rutaImg1, &infoMeta, &mat) == 0)
     {
         printf("Error en la lectura de la imagen\n");
         return 0;
