@@ -3,7 +3,7 @@
 
 void liberarMatriz(t_pixel **mat, size_t cf)
 {
-    if(mat == NULL) return; // <-- Evita crasheos si la matriz no se creó
+    if(mat == NULL) return; // <-- Evita crasheos si la matriz no se creÃ³
 
     for(int i=0; i<cf; i++)
     {
@@ -68,12 +68,12 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
 
     if (tipo[0] != 'B' || tipo[1] != 'M')
     {
-        printf("El archivo no es un BMP válido.\n");
+        printf("El archivo no es un BMP vÃ¡lido.\n");
         fclose(bmp);
         return 0;
     }
 
-    //Tamaño del Archivo
+    //TamaÃ±o del Archivo
     fread(&(infoBmp->tamArchivo), sizeof(unsigned int), 1, bmp);
 
     //Bytes Reservados
@@ -82,7 +82,7 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
     //Inicio de los datos de la imagen
     fread(&(infoBmp->tamEncabezado), sizeof(unsigned int), 1, bmp); //Nos guardamos el byte exacto donde empiezan los pixeles
 
-    //Tamaño de la Cabecera
+    //TamaÃ±o de la Cabecera
     fseek(bmp, 4, SEEK_CUR); //Los avanzamos sin guardar nada (los ignoramos)
 
     //Ancho
@@ -91,16 +91,16 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
     //Alto
     fread(&(infoBmp->alto), sizeof(unsigned int), 1, bmp);
 
-    //Número de planos
+    //NÃºmero de planos
     fseek(bmp, 2, SEEK_CUR); //Los avanzamos sin guardar nada (los ignoramos)
 
-    //Profundidad (tamaño de cada punto)
+    //Profundidad (tamaÃ±o de cada punto)
     fread(&(infoBmp->profundidad), sizeof(unsigned short), 1, bmp);
 
     //Validamos que la profundidad sea de 24 bits
     if(infoBmp->profundidad != 24)
     {
-        printf("Profundidad inválida. Solo se admiten imagenes de 24 bits.\n");
+        printf("Profundidad invÃ¡lida. Solo se admiten imagenes de 24 bits.\n");
         fclose(bmp);
         return 0;
     }
@@ -108,7 +108,7 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
     //Nos posicionamos donde arrancan los pixeles (tamEncabezado)
     fseek(bmp, infoBmp->tamEncabezado, SEEK_SET);
 
-    //Creamos la matriz dinámica de pixeles
+    //Creamos la matriz dinÃ¡mica de pixeles
     *imagen = crearMatrizDinamica(infoBmp->alto, infoBmp->ancho);
     if(!*imagen)
     {
@@ -133,35 +133,42 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
     }
 
     fclose(bmp);
-    return 1; //Se leyó correctamente la imagen
+    return 1; //Se leyÃ³ correctamente la imagen
 
 }
 
-int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
+int escribirBmp(const char* ruta,char *nombreFiltro, t_metadata* infoBmp, t_pixel** imagen)
 {
-    FILE* bmp = fopen(ruta, "wb");
+    char *cadFinal;
+
+   cadFinal = strcat(cadFinal, GRUPO);
+   cadFinal = strcat(cadFinal, nombreFiltro);
+   cadFinal = strcat(cadFinal, ruta);
+
+    FILE* bmp = fopen(cadFinal, "wb");
     if(!bmp)
     {
         printf("No se pudo abrir el archivo %s.\n", ruta);
         return 0;
     }
+
     //Realizamos el padding
     int padding = calcularPadding(infoBmp->ancho);
 
-    //Calculamos el tamaño total de la fila en bytes
+    //Calculamos el tamaÃ±o total de la fila en bytes
     int tamFil = (infoBmp->ancho * sizeof(t_pixel) + padding);
 
-    //Calculamos el tamaño total de la imagen
+    //Calculamos el tamaÃ±o total de la imagen
     unsigned int tamDatosImg = (tamFil * infoBmp->alto);
 
-    //Calculamos el tamaño total del archivo
+    //Calculamos el tamaÃ±o total del archivo
     unsigned int tamArch = (54 + tamDatosImg);
 
     //Escribimos el tipo de archivo
     char tipo[2]= {'B', 'M'};
     fwrite(tipo, sizeof(char), 2, bmp);
 
-    //Tamaño del Archivo
+    //TamaÃ±o del Archivo
     fwrite(&tamArch, sizeof(unsigned int), 1, bmp);
 
     //Definimos una variable para escribir Bytes vacios
@@ -172,7 +179,7 @@ int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
     unsigned int offset=54;
     fwrite(&offset, sizeof(unsigned int), 1, bmp);
 
-    //Definimos el tamaño de la cabecera de la imagen
+    //Definimos el tamaÃ±o de la cabecera de la imagen
     unsigned int tamInfo = 40;
     fwrite(&tamInfo, sizeof(unsigned int), 1, bmp);
 
@@ -182,11 +189,11 @@ int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
     //Alto
     fwrite(&(infoBmp->alto), sizeof(unsigned int), 1, bmp);
 
-    //Número de planos
+    //NÃºmero de planos
     unsigned short planos = 1;
     fwrite(&planos, sizeof(unsigned short), 1, bmp);
 
-    //Profundidad (tamaño de cada punto)
+    //Profundidad (tamaÃ±o de cada punto)
     unsigned short profundidad = 24;
     fwrite(&profundidad, sizeof(unsigned short), 1, bmp);
 
@@ -194,7 +201,7 @@ int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
     unsigned int compresion = 0;
     fwrite(&compresion, sizeof(unsigned int), 1, bmp);
 
-    //Tamaño de imagen
+    //TamaÃ±o de imagen
     fwrite(&tamDatosImg, sizeof(unsigned int), 1, bmp);
 
     //Escribimos los ultimos 16 bytes
@@ -216,7 +223,7 @@ int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
         }
     }
     fclose(bmp);
-    return 1; //Se escribió correctamente la imagen
+    return 1; //Se escribiÃ³ correctamente la imagen
 }
 
 unsigned char limitarColor(int num)
