@@ -37,90 +37,32 @@ int solucion(int argc, char *argv[])
 
     if(!parsearArgumentos(argc,argv,&config))
     {
-        return 0; //Algo fallo en el parser
+        printf("Fallo en la funcion parsear.\n");
+        return 0;
     }
 
     //Una vez que el parser ya nos devolvio todos los filtros, imagenes etc
 
     //LOGICA PARA IR PREGUNTANDO POR CADA FILTRO E IR DESGLOSANDO TODO
 
-    leerBmp(config.rutaImg1,&infoMeta,&mat);
-
-    if(config.negativo==1)
+    if(!leerBmp(config.rutaImg1,&infoMeta,&mat))
     {
-        //Falta hacer
-        escribirBmp(config.rutaImg1,"_negativo_",&infoMeta,mat);
-
-    }
-
-    if(config.escalaGrises==1)
-    {
-        escalaDeGrises(mat,infoMeta.alto,infoMeta.ancho);
-        escribirBmp(config.rutaImg1,"_escala-de-grises_",&infoMeta,mat);
-
-    }
-
-    if(config.espejarHorizontal==1)
-    {
-
-        espejarHorizontal(mat,infoMeta.alto,infoMeta.ancho);
-        escribirBmp(config.rutaImg1,"_espejar-horizontal_",&infoMeta,mat);
-
-    }
-
-    if(config.espejarVertical==1)
-    {
-
-        espejarVertical(mat,infoMeta.alto);
-        escribirBmp(config.rutaImg1,"_espejar-vertical_",&infoMeta,mat);
-
-    }
-
-    if(config.rotarDerecha==1)
-    {
-
-        mat=rotarDerecha(mat,&infoMeta,&nuevaMeta);
-        escribirBmp(config.rutaImg1,"_rotar-derecha_",&infoMeta,mat);
-
-    }
-
-    if(config.rotarIzquierda==1)
-    {
-        mat=rotarIzquierda(mat,&infoMeta,&nuevaMeta);
-        escribirBmp(config.rutaImg1,"_rotar-izquierda_",&infoMeta,mat);
-
-    }
-
-    if(config.concatenarHorizontal==1)
-    {
-        leerBmp(config.rutaImg2,&infoMeta,&mat); //Leemos segundo archivo
-
-        //Falta hacer
-
-        escribirBmp(config.rutaImg1,"_concatenar-horizontal_",&infoMeta,mat);
-
-    }
-
-    if(config.concatenarVertical==1)
-    {
-
-        leerBmp(config.rutaImg2,&infoMeta,&mat); //Leemos segundo archivo
-
-        //Falta hacer
-
-        escribirBmp(config.rutaImg1,"_concatenar-vertical_",&infoMeta,mat);
-
-    }
-    if(config.comodin==1)
-    {
-
-        //Falta hacer
-
-        escribirBmp(config.rutaImg1,"_comodin_",&infoMeta,mat);
+        printf("No se pudo leer bien el archivo.\n");
+        return 0;
 
     }
 
 
+
+
+
+
+
+
+
+
+
+    //Liberamos matriz original
 
     liberarMatriz(mat, infoMeta.alto);
 

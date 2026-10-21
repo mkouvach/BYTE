@@ -1,5 +1,6 @@
 #ifndef FUNCIONES_KOUVACH_H_INCLUDED
 #define FUNCIONES_KOUVACH_H_INCLUDED
+
 #include "compartido.h"
 
 
