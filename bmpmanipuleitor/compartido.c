@@ -37,6 +37,29 @@ t_pixel **crearMatrizDinamica(size_t cf, size_t cc)
 
 }
 
+t_pixel ** clonarMatriz(t_pixel **mat,size_t cf, size_t cc)
+{
+    t_pixel **copia=crearMatrizDinamica(cf,cc); //Reservamos memoria para clonar
+
+    if(!copia)
+    {
+        printf("Error al asignar memoria.\n");
+        return NULL;
+    }
+
+    for(int i=0; i<cf; i++)
+    {
+        for(int j=0; j<cc; j++)
+        {
+            copia[i][j]=mat[i][j]; //Copiamos contenido
+
+        }
+    }
+
+    return copia;
+
+}
+
 int calcularPadding(int ancho)
 {
     int bytesFila = ancho * sizeof(t_pixel); // 3 bytes
@@ -137,15 +160,10 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
 
 }
 
-int escribirBmp(const char* ruta,char *nombreFiltro, t_metadata* infoBmp, t_pixel** imagen)
+int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
 {
-    char *cadFinal;
 
-   cadFinal = strcat(cadFinal, GRUPO);
-   cadFinal = strcat(cadFinal, nombreFiltro);
-   cadFinal = strcat(cadFinal, ruta);
-
-    FILE* bmp = fopen(cadFinal, "wb");
+    FILE* bmp = fopen(ruta, "wb");
     if(!bmp)
     {
         printf("No se pudo abrir el archivo %s.\n", ruta);
@@ -313,7 +331,7 @@ int parsearArgumentos(int argc, char *argv[], t_config *config)
         char *pArgv = *(argv+i);
 
         // Preguntamos si es una ruta de imagen, es decir, que no arranquen en "--"
-        if(pArgv!='-'||(pArgv+1)!='-')
+        if(*pArgv!='-'||*(pArgv+1)!='-')
         {
 
             //Es una ruta de imagen
@@ -379,6 +397,8 @@ int parsearArgumentos(int argc, char *argv[], t_config *config)
                         printf("Argumento %s no reconocido.\n",pArgv);
                     }
                 }
+
+
 
             }
             else
