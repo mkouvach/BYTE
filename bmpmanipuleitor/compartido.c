@@ -1,11 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "compartido.h"
 
 
 void liberarMatriz(t_pixel **mat, size_t cf)
 {
-    if(mat == NULL) return; // <-- Evita crasheos si la matriz no se creó
+    if(mat == NULL) return; // <-- Evita crasheos si la matriz no se creÃ³
 
     for(int i=0; i<cf; i++)
     {
@@ -70,12 +68,12 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
 
     if (tipo[0] != 'B' || tipo[1] != 'M')
     {
-        printf("El archivo no es un BMP válido.\n");
+        printf("El archivo no es un BMP vÃ¡lido.\n");
         fclose(bmp);
         return 0;
     }
 
-    //Tamaño del Archivo
+    //TamaÃ±o del Archivo
     fread(&(infoBmp->tamArchivo), sizeof(unsigned int), 1, bmp);
 
     //Bytes Reservados
@@ -84,7 +82,7 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
     //Inicio de los datos de la imagen
     fread(&(infoBmp->tamEncabezado), sizeof(unsigned int), 1, bmp); //Nos guardamos el byte exacto donde empiezan los pixeles
 
-    //Tamaño de la Cabecera
+    //TamaÃ±o de la Cabecera
     fseek(bmp, 4, SEEK_CUR); //Los avanzamos sin guardar nada (los ignoramos)
 
     //Ancho
@@ -93,16 +91,16 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
     //Alto
     fread(&(infoBmp->alto), sizeof(unsigned int), 1, bmp);
 
-    //Número de planos
+    //NÃºmero de planos
     fseek(bmp, 2, SEEK_CUR); //Los avanzamos sin guardar nada (los ignoramos)
 
-    //Profundidad (tamaño de cada punto)
+    //Profundidad (tamaÃ±o de cada punto)
     fread(&(infoBmp->profundidad), sizeof(unsigned short), 1, bmp);
 
     //Validamos que la profundidad sea de 24 bits
     if(infoBmp->profundidad != 24)
     {
-        printf("Profundidad inválida. Solo se admiten imagenes de 24 bits.\n");
+        printf("Profundidad invÃ¡lida. Solo se admiten imagenes de 24 bits.\n");
         fclose(bmp);
         return 0;
     }
@@ -110,7 +108,7 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
     //Nos posicionamos donde arrancan los pixeles (tamEncabezado)
     fseek(bmp, infoBmp->tamEncabezado, SEEK_SET);
 
-    //Creamos la matriz dinámica de pixeles
+    //Creamos la matriz dinÃ¡mica de pixeles
     *imagen = crearMatrizDinamica(infoBmp->alto, infoBmp->ancho);
     if(!*imagen)
     {
@@ -135,35 +133,42 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
     }
 
     fclose(bmp);
-    return 1; //Se leyó correctamente la imagen
+    return 1; //Se leyÃ³ correctamente la imagen
 
 }
 
-int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
+int escribirBmp(const char* ruta,char *nombreFiltro, t_metadata* infoBmp, t_pixel** imagen)
 {
-    FILE* bmp = fopen(ruta, "wb");
+    char *cadFinal;
+
+   cadFinal = strcat(cadFinal, GRUPO);
+   cadFinal = strcat(cadFinal, nombreFiltro);
+   cadFinal = strcat(cadFinal, ruta);
+
+    FILE* bmp = fopen(cadFinal, "wb");
     if(!bmp)
     {
         printf("No se pudo abrir el archivo %s.\n", ruta);
         return 0;
     }
+
     //Realizamos el padding
     int padding = calcularPadding(infoBmp->ancho);
 
-    //Calculamos el tamaño total de la fila en bytes
+    //Calculamos el tamaÃ±o total de la fila en bytes
     int tamFil = (infoBmp->ancho * sizeof(t_pixel) + padding);
 
-    //Calculamos el tamaño total de la imagen
+    //Calculamos el tamaÃ±o total de la imagen
     unsigned int tamDatosImg = (tamFil * infoBmp->alto);
 
-    //Calculamos el tamaño total del archivo
+    //Calculamos el tamaÃ±o total del archivo
     unsigned int tamArch = (54 + tamDatosImg);
 
     //Escribimos el tipo de archivo
     char tipo[2]= {'B', 'M'};
     fwrite(tipo, sizeof(char), 2, bmp);
 
-    //Tamaño del Archivo
+    //TamaÃ±o del Archivo
     fwrite(&tamArch, sizeof(unsigned int), 1, bmp);
 
     //Definimos una variable para escribir Bytes vacios
@@ -174,7 +179,7 @@ int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
     unsigned int offset=54;
     fwrite(&offset, sizeof(unsigned int), 1, bmp);
 
-    //Definimos el tamaño de la cabecera de la imagen
+    //Definimos el tamaÃ±o de la cabecera de la imagen
     unsigned int tamInfo = 40;
     fwrite(&tamInfo, sizeof(unsigned int), 1, bmp);
 
@@ -184,11 +189,11 @@ int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
     //Alto
     fwrite(&(infoBmp->alto), sizeof(unsigned int), 1, bmp);
 
-    //Número de planos
+    //NÃºmero de planos
     unsigned short planos = 1;
     fwrite(&planos, sizeof(unsigned short), 1, bmp);
 
-    //Profundidad (tamaño de cada punto)
+    //Profundidad (tamaÃ±o de cada punto)
     unsigned short profundidad = 24;
     fwrite(&profundidad, sizeof(unsigned short), 1, bmp);
 
@@ -196,7 +201,7 @@ int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
     unsigned int compresion = 0;
     fwrite(&compresion, sizeof(unsigned int), 1, bmp);
 
-    //Tamaño de imagen
+    //TamaÃ±o de imagen
     fwrite(&tamDatosImg, sizeof(unsigned int), 1, bmp);
 
     //Escribimos los ultimos 16 bytes
@@ -218,7 +223,7 @@ int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
         }
     }
     fclose(bmp);
-    return 1; //Se escribió correctamente la imagen
+    return 1; //Se escribiÃ³ correctamente la imagen
 }
 
 unsigned char limitarColor(int num)
@@ -240,6 +245,7 @@ void inicializarMetadata(t_metadata* meta, unsigned int ancho, unsigned int alto
 }
 
 //Inicializa estructura t_config
+
 void inicializarConfig(t_config* config)
 {
     config->cantImagenes = 0;
@@ -270,6 +276,7 @@ void inicializarConfig(t_config* config)
 }
 
 //Limpia la ruta de la imagen
+
 void extraerNombreBase(const char *ruta, char *destino)
 {
     char *ultBarra = strrchr(ruta,'/');
@@ -299,15 +306,161 @@ void extraerNombreBase(const char *ruta, char *destino)
     }
 }
 
+int parsearArgumentos(int argc, char *argv[], t_config *config)
+{
+
+    for(int i=1; i<argc; i++)
+    {
+
+        char *pArgv = *(argv+i);
+
+        // Preguntamos si es una ruta de imagen, es decir, que no arranquen en "--"
+
+        if(pArgv!='-'||(pArgv+1)!='-')
+        {
+
+            //Es una ruta de imagen
+
+            if(config->cantImagenes==0)
+            {
+                strcpy(config->rutaImg1,pArgv);
+                config->cantImagenes++;
+            }
+
+            else if(config->cantImagenes==1)
+            {
+                strcpy(config->rutaImg2,pArgv);
+                config->cantImagenes++;
+            }
+            else
+            {
+                printf("Limite de imagenes superado, la imagen %s sera ignorada.\n",pArgv);
+            }
+
+        }
+
+        else
+
+        {
+            //Arranca con "--"
+
+            char *igual=strchr(pArgv,'=');
+
+            if(igual!=NULL)
+            {
+                //Es un filtro de porcentaje
+
+                int valor=atoi(igual+1);
+
+                if(valor >= 0 && valor <= 100) //Validamos rango porcentaje
+                {
+
+                    if (strncmp(pArgv, "--aumentar-contraste=", 21) == 0)
+                    {
+                        config->aumentarContraste = valor;
+                    }
+                    else if (strncmp(pArgv, "--reducir-contraste=", 20) == 0)
+                    {
+                        config->reducirContraste = valor;
+                    }
+                    else if (strncmp(pArgv, "--tonalidad-azul=", 17) == 0)
+                    {
+                        config->tonalidadAzul = valor;
+                    }
+                    else if (strncmp(pArgv, "--tonalidad-verde=", 18) == 0)
+                    {
+                        config->tonalidadVerde = valor;
+                    }
+                    else if (strncmp(pArgv, "--tonalidad-roja=", 17) == 0)
+                    {
+                        config->tonalidadRoja = valor;
+                    }
+                    else if (strncmp(pArgv, "--recortar=", 11) == 0)
+                    {
+                        config->recortar = valor;
+                    }
+                    else if (strncmp(pArgv, "--achicar=", 10) == 0)
+                    {
+                        config->achicar = valor;
+                    }
+                    else
+                    {
+                        printf("Argumento %s no reconocido.\n",pArgv);
+                    }
+
+
+                }
+
+            }
+
+            else
+
+            {
+
+                //Es un filtro simple
+
+                if(strcmp(pArgv,"--negativo")==0)
+                {
+                    config->negativo = 1;
+                }
+                else if(strcmp(pArgv,"--escala-de-grises")==0)
+                {
+                    config->escalaGrises = 1;
+                }
+                else if(strcmp(pArgv,"--espejar-horizontal")==0)
+                {
+                    config->espejarHorizontal = 1;
+                }
+                else if(strcmp(pArgv,"--espejar-vertical")==0)
+                {
+                    config->espejarVertical = 1;
+                }
+                else if(strcmp(pArgv,"--rotar-derecha")==0)
+                {
+                    config->rotarDerecha = 1;
+                }
+                else if(strcmp(pArgv,"--rotar-izquierda")==0)
+                {
+                    config->rotarIzquierda = 1;
+                }
+                else if(strcmp(pArgv,"--concatenar-horizontal")==0)
+                {
+                    config->concatenarHorizontal = 1;
+                }
+                else if(strcmp(pArgv,"--concatenar-vertical")==0)
+                {
+                    config->concatenarVertical = 1;
+                }
+                else if(strcmp(pArgv,"--comodin")==0)
+                {
+                    config->comodin = 1;
+                }
+
+                else
+                {
+                    printf("Argumento %s no reconocido.\n",pArgv);
+                }
+
+            }
+
+        }
+
+    }
+
+
+    //Validamos que exista al menos una imagen
+
+    if(config->cantImagenes==0)
+    {
+        printf("No se cargo ningun archivo BMP.\n");
+        return 0;
+    }
 
 
 
+    return 1;
 
 
-
-
-
-
-
+}
 
 
