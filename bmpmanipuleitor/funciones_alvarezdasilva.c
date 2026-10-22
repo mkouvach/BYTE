@@ -35,7 +35,9 @@ void copiarImagen(t_pixel** destino, t_pixel** origen, unsigned int alto, unsign
 //ACHICAR (PORCENTAJE)
 t_pixel** achicarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metadata* metaNueva, int porcentaje)
 {
-    //agregar validacion porcentaje 0, que no rompa la matriz 0x0
+    //Validamos si porcentaje == 0, no realiza cambios, la matriz/imagen se mantiene igual
+    if(porcentaje == 0)
+        porcentaje = 100;
 
     unsigned int nuevoAncho = (metaOrig->ancho * (unsigned int) porcentaje) / 100;
     unsigned int nuevoAlto = (metaOrig->alto * (unsigned int) porcentaje) / 100;

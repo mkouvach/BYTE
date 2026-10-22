@@ -285,12 +285,12 @@ void extraerNombreBase(const char *ruta, char *destino)
 
     //Recorremos rutas inversamente hasta encontrar "/ o \\" y descartamos el resto
 
-    if(ultBarra!=NULL && ultBarra>=ini)
+    if(ultBarra != NULL && ultBarra >= ini)
     {
         ini = ultBarra + 1;
     }
 
-    if(ultBarra1!=NULL && ultBarra1>=ini)
+    if(ultBarra1 != NULL && ultBarra1 >= ini)
     {
         ini = ultBarra1 + 1;
     }
@@ -300,7 +300,7 @@ void extraerNombreBase(const char *ruta, char *destino)
 
     char *punto = strrchr(destino, '.'); //Reverse
 
-    if(punto!=NULL)
+    if(punto != NULL)
     {
         *punto = '\0'; //Cortamos la cadena en el punto
     }
@@ -308,25 +308,20 @@ void extraerNombreBase(const char *ruta, char *destino)
 
 int parsearArgumentos(int argc, char *argv[], t_config *config)
 {
-
     for(int i=1; i<argc; i++)
     {
-
         char *pArgv = *(argv+i);
 
         // Preguntamos si es una ruta de imagen, es decir, que no arranquen en "--"
-
         if(pArgv!='-'||(pArgv+1)!='-')
         {
 
             //Es una ruta de imagen
-
             if(config->cantImagenes==0)
             {
                 strcpy(config->rutaImg1,pArgv);
                 config->cantImagenes++;
             }
-
             else if(config->cantImagenes==1)
             {
                 strcpy(config->rutaImg2,pArgv);
@@ -336,14 +331,10 @@ int parsearArgumentos(int argc, char *argv[], t_config *config)
             {
                 printf("Limite de imagenes superado, la imagen %s sera ignorada.\n",pArgv);
             }
-
         }
-
         else
-
         {
             //Arranca con "--"
-
             char *igual=strchr(pArgv,'=');
 
             if(igual!=NULL)
@@ -387,16 +378,11 @@ int parsearArgumentos(int argc, char *argv[], t_config *config)
                     {
                         printf("Argumento %s no reconocido.\n",pArgv);
                     }
-
-
                 }
 
             }
-
             else
-
             {
-
                 //Es un filtro simple
 
                 if(strcmp(pArgv,"--negativo")==0)
@@ -456,11 +442,7 @@ int parsearArgumentos(int argc, char *argv[], t_config *config)
         return 0;
     }
 
-
-
     return 1;
-
-
 }
 
 

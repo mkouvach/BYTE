@@ -23,19 +23,17 @@ void espejarVertical(t_pixel **mat, int alto)
 t_pixel** recortarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metadata* metaNueva, int porcentaje)
 {
 
-    // Copiamos todos los datos base de la original
+    //Copiamos todos los datos base de la original
 
     *metaNueva = *metaOrig;
 
     //Calculamos nuevo ancho y alto
 
-
-    //Chequeamos validacion con porcentaje 0
-
-    if(porcentaje==0)
+    //Validamos si porcentaje == 0, no realiza cambios, la matriz/imagen se mantiene igual
+    if(porcentaje == 0)
     {
-        metaNueva->alto=metaOrig->alto;
-        metaNueva->ancho=metaOrig->ancho;
+        metaNueva->alto = metaOrig->alto;
+        metaNueva->ancho = metaOrig->ancho;
 
     }
     else
@@ -56,9 +54,9 @@ t_pixel** recortarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metada
         return NULL;
     }
 
-    for(int i=0; i<metaNueva->alto; i++)
+    for(int i = 0; i<metaNueva->alto; i++)
     {
-        for(int j=0; j<metaNueva->ancho; j++)
+        for(int j = 0; j<metaNueva->ancho; j++)
         {
             nuevaMat[i][j] = matOrig[i][j]; //Intercambiamos contenido de matrices
         }
@@ -72,15 +70,15 @@ t_pixel** recortarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metada
 
 //ROTAR DERECHA
 
-t_pixel** rotarDerecha(t_pixel** matOrig, t_metadata* metaOrig,t_metadata* metaNueva)
+t_pixel** rotarDerecha(t_pixel** matOrig, t_metadata* metaOrig, t_metadata* metaNueva)
 {
 
     //Se intercambian dimensiones
 
-    metaNueva->alto=metaOrig->ancho;
-    metaNueva->ancho=metaOrig->alto;
+    metaNueva->alto = metaOrig->ancho;
+    metaNueva->ancho = metaOrig->alto;
 
-    t_pixel **nuevaMat=crearMatrizDinamica(metaNueva->alto,metaNueva->ancho);
+    t_pixel **nuevaMat = crearMatrizDinamica(metaNueva->alto, metaNueva->ancho);
 
     if(!nuevaMat)
     {
@@ -110,14 +108,14 @@ t_pixel** rotarDerecha(t_pixel** matOrig, t_metadata* metaOrig,t_metadata* metaN
 
 //ROTAR IZQUIERDA
 
-t_pixel** rotarIzquierda(t_pixel** matOrig, t_metadata* metaOrig,t_metadata* metaNueva)
+t_pixel** rotarIzquierda(t_pixel** matOrig, t_metadata* metaOrig, t_metadata* metaNueva)
 {
     //Se intercambian dimensiones
 
-    metaNueva->alto=metaOrig->ancho;
-    metaNueva->ancho=metaOrig->alto;
+    metaNueva->alto = metaOrig->ancho;
+    metaNueva->ancho = metaOrig->alto;
 
-    t_pixel **nuevaMat=crearMatrizDinamica(metaNueva->alto,metaNueva->ancho);
+    t_pixel **nuevaMat = crearMatrizDinamica(metaNueva->alto, metaNueva->ancho);
 
     if(!nuevaMat)
     {
