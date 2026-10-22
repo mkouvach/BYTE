@@ -1,17 +1,44 @@
 #include "funciones_alvarezdasilva.h"
 #include "compartido.h"
 
+//FUNCIONES COMPLEMENTARIAS
+
+// Pinta toda la matriz con un color neutro (ni blanco ni negro)
+void rellenarMatriz(t_pixel** mat, unsigned int alto, unsigned int ancho)
+{
+    t_pixel relleno;
+    relleno.pixel[AZUL] = 180;
+    relleno.pixel[VERDE] = 130;
+    relleno.pixel[ROJO] = 70;
+
+    for(unsigned int i = 0; i < alto; i++)
+    {
+        for(unsigned int j = 0; j < ancho; j++)
+        {
+            mat[i][j] = relleno;
+        }
+    }
+}
+
+// Copia imagen origen (alto x ancho) en destino desde (filaIni, colIni)
+void copiarImagen(t_pixel** destino, t_pixel** origen, unsigned int alto, unsigned int ancho, unsigned int filaIni, unsigned int colIni)
+{
+    for(unsigned int i = 0; i < alto; i++)
+    {
+        for(unsigned int j = 0; j < ancho; j++)
+        {
+            destino[filaIni + i][colIni + j] = origen[i][j];
+        }
+    }
+}
+
 //ACHICAR (PORCENTAJE)
 t_pixel** achicarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metadata* metaNueva, int porcentaje)
 {
-    if(porcentaje < 1 || porcentaje > 100)
-    {
-        printf("Porcentaje incorrecto. Se necesita un valor entr 1 y 100\n");
-        return NULL;
-    }
+    //agregar validacion porcentaje 0, que no rompa la matriz 0x0
 
-    unsigned int nuevoAncho = (metaOrig->ancho * porcentaje) / 100;
-    unsigned int nuevoAlto = (metaOrig->alto * porcentaje) / 100;
+    unsigned int nuevoAncho = (metaOrig->ancho * (unsigned int) porcentaje) / 100;
+    unsigned int nuevoAlto = (metaOrig->alto * (unsigned int) porcentaje) / 100;
 
     //No dejamos dimensiones en 0
     if(nuevoAncho == 0)
@@ -28,6 +55,7 @@ t_pixel** achicarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metadat
 
     unsigned int i, j;
 
+    //Recorrmos matriz destino y calculamos con cual quedarnos de la matriz original.
     for(i=0; i < nuevoAlto; i++)
     {
         unsigned int origI = (i * metaOrig->alto) / nuevoAlto;
@@ -44,7 +72,72 @@ t_pixel** achicarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metadat
 }
 
 //CONCATENAR HORIZONTAL (2 IMAGENES)
+//Imagen/Mat A Izquierda - Imagen/Mat B Derecha
+t_pixel** concatenarHorizontal(t_pixel** mat1, const t_metadata* meta1, t_pixel** mat2, const t_metadata* meta2, t_metadata* metaNueva)
+{
+    unsigned int anchoTotal = meta1->ancho + meta2->ancho;
+    unsigned int altoTotal;
+
+    if(meta1->alto > meta2->alto)
+    {
+        altoTotal = meta1->alto;
+    }
+    else
+    {
+        altoTotal = meta2->alto;
+    }
+
+    t_pixel** nueva = crearMatrizDinamica(altoTotal, anchoTotal);
+    if(!nueva)
+    {
+        printf("Error: Falló la asignación de memoria para crear la matriz.\n");
+        return NULL;
+    }
+
+    //rellenamos por si una de las dos imagenes es de menor altura
+    rellenarMatriz(nueva, altoTotal, anchoTotal);
+
+    copiarImagen(nueva, mat1, meta1->alto, meta1->ancho, altoTotal - meta1->alto, 0);
+    //comienza donde finaliza el ancho de la primer imagen
+    copiarImagen(nueva, mat2, meta2->alto, meta2->ancho, altoTotal - meta2->alto, meta1->ancho);
+
+    inicializarMetadata(metaNueva, anchoTotal, altoTotal);
+    return nueva;
+}
+
 
 //CONCATENAR VERTICAL (2 IMAGENES)
+//Imagen/Mat A Arriba - Imagen/Mat B Abajo
+t_pixel** concatenarVertical(t_pixel** mat1, const t_metadata* meta1, t_pixel** mat2, const t_metadata* meta2, t_metadata* metaNueva)
+{
+    unsigned int altoTotal  = meta1->alto + meta2->alto;
+    unsigned int anchoTotal;
+
+    if(meta1->ancho > meta2->ancho)
+    {
+        anchoTotal = meta1->ancho;
+    }
+    else
+    {
+        anchoTotal = meta2->ancho;
+    }
+
+    t_pixel** nueva = crearMatrizDinamica(altoTotal, anchoTotal);
+    if(!nueva)
+    {
+        printf("Error: Falló la asignación de memoria para crear la matriz.\n");
+        return NULL;
+    }
+
+    //rellenamos por si una de las dos imagenes es de menor ancho
+    rellenarMatriz(nueva, altoTotal, anchoTotal);
+
+    copiarImagen(nueva, mat2, meta2->alto, meta2->ancho, 0, 0);
+    //comienza donde finaliza el alto de la primer imagen
+    copiarImagen(nueva, mat1, meta1->alto, meta1->ancho, meta2->alto, 0);
+
+    inicializarMetadata(metaNueva, anchoTotal, altoTotal);
+    return nueva;
+}
 
 //COMODIN
