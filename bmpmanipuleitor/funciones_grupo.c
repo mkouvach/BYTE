@@ -48,7 +48,6 @@ int solucion(int argc, char *argv[])
 
     }
 
-
     char nombreBase[128];
     char nombreSalida[256];
 
@@ -188,7 +187,7 @@ int solucion(int argc, char *argv[])
 
     if(config.aumentarContraste != -1)
     {
-        t_pixel **copia = clonarMatriz(mat, infoMeta.alto,infoMeta.ancho);
+        t_pixel **copia = clonarMatriz(mat, infoMeta.alto, infoMeta.ancho);
 
         if(copia != NULL)
         {
@@ -319,7 +318,7 @@ int solucion(int argc, char *argv[])
                 if(config.concatenarHorizontal == 1)
                 {
                     t_metadata metaNueva;
-                    t_pixel** matNueva = concatenarHorizontal(mat, &infoMeta,mat2, &infoMeta2, &metaNueva);
+                    t_pixel** matNueva = concatenarHorizontal(mat, &infoMeta, mat2, &infoMeta2, &metaNueva);
 
                     if (matNueva != NULL)
                     {
@@ -336,7 +335,7 @@ int solucion(int argc, char *argv[])
                 if(config.concatenarVertical == 1)
                 {
                     t_metadata metaNueva;
-                    t_pixel** matNueva = concatenarVertical(mat, &infoMeta,mat2, &infoMeta2, &metaNueva);
+                    t_pixel** matNueva = concatenarVertical(mat, &infoMeta, mat2, &infoMeta2, &metaNueva);
 
                     if (matNueva != NULL)
                     {

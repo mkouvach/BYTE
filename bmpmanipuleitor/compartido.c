@@ -152,7 +152,6 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
         {
             fseek(bmp, padding, SEEK_CUR);
         }
-
     }
 
     fclose(bmp);
@@ -352,7 +351,6 @@ void extraerNombreBase(const char *ruta, char *destino)
         ini = ultBarra1 + 1;
     }
 
-
     strcpy(destino, ini); //Copiamos nombre archivo con extension .bmp
 
     char *punto = strrchr(destino, '.'); //Reverse
@@ -400,9 +398,9 @@ int parsearArgumentos(int argc, char *argv[], t_config *config)
             {
                 //Es un filtro de porcentaje
 
-                int valor=0;
+                int valor = 0;
 
-                if(!esPorcentajeValido(igual+1,&valor))
+                if(!esPorcentajeValido(igual + 1, &valor))
                 {
                     printf("Porcentaje invalido. Debe ser un numero entero entre 0 y 100.\n");
                 }
@@ -441,7 +439,6 @@ int parsearArgumentos(int argc, char *argv[], t_config *config)
                     {
                         printf("Argumento %s no reconocido.\n",pArgv);
                     }
-
                 }
 
             }
@@ -494,9 +491,7 @@ int parsearArgumentos(int argc, char *argv[], t_config *config)
             }
 
         }
-
     }
-
 
     //Validamos que exista al menos una imagen
 

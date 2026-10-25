@@ -16,7 +16,6 @@ void espejarVertical(t_pixel **mat, int alto)
         *(mat + filaOpuesta) = aux;
 
     }
-
 }
 
 //RECORTAR (PORCENTAJE)
@@ -67,7 +66,6 @@ t_pixel** recortarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metada
     inicializarMetadata(metaNueva,nuevoAncho,nuevoAlto);
 
     return nuevaMat;
-
 }
 
 //ROTAR DERECHA
