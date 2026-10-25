@@ -48,10 +48,10 @@ t_pixel** achicarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metadat
     if(nuevoAlto == 0)
         nuevoAlto = 1;
 
-    t_pixel** nueva = crearMatrizDinamica(nuevoAlto, nuevoAncho);
+    t_pixel** nueva = (t_pixel**)crearMatrizDinamica(nuevoAlto, nuevoAncho, sizeof(t_pixel));
     if(!nueva)
     {
-        printf("Error: Falló la asignación de memoria para crear la matriz.\n");
+        printf("Error: FallÃ³ la asignaciÃ³n de memoria para crear la matriz.\n");
         return NULL;
     }
 
@@ -89,10 +89,10 @@ t_pixel** concatenarHorizontal(t_pixel** mat1, const t_metadata* meta1, t_pixel*
         altoTotal = meta2->alto;
     }
 
-    t_pixel** nueva = crearMatrizDinamica(altoTotal, anchoTotal);
+    t_pixel** nueva = (t_pixel**)crearMatrizDinamica(altoTotal, anchoTotal, sizeof(t_pixel));
     if(!nueva)
     {
-        printf("Error: Falló la asignación de memoria para crear la matriz.\n");
+        printf("Error: FallÃ³ la asignaciÃ³n de memoria para crear la matriz.\n");
         return NULL;
     }
 
@@ -106,7 +106,6 @@ t_pixel** concatenarHorizontal(t_pixel** mat1, const t_metadata* meta1, t_pixel*
     inicializarMetadata(metaNueva, anchoTotal, altoTotal);
     return nueva;
 }
-
 
 //CONCATENAR VERTICAL (2 IMAGENES)
 //Imagen/Mat A Arriba - Imagen/Mat B Abajo
@@ -124,10 +123,10 @@ t_pixel** concatenarVertical(t_pixel** mat1, const t_metadata* meta1, t_pixel** 
         anchoTotal = meta2->ancho;
     }
 
-    t_pixel** nueva = crearMatrizDinamica(altoTotal, anchoTotal);
+    t_pixel** nueva = (t_pixel**)crearMatrizDinamica(altoTotal, anchoTotal, sizeof(t_pixel));
     if(!nueva)
     {
-        printf("Error: Falló la asignación de memoria para crear la matriz.\n");
+        printf("Error: FallÃ³ la asignaciÃ³n de memoria para crear la matriz.\n");
         return NULL;
     }
 
@@ -144,19 +143,19 @@ t_pixel** concatenarVertical(t_pixel** mat1, const t_metadata* meta1, t_pixel** 
 
 //COMODIN
 //BLUR (promedio de vecindario 3x3)
-int comodinBlur(t_pixel** mat, int alto, int ancho)
+t_pixel** comodinBlur(t_pixel** mat, int alto, int ancho)
 {
-    t_pixel** nueva = clonarMatriz(mat, alto, ancho);
+    t_pixel** nueva = (t_pixel**)crearMatrizDinamica(alto, ancho, sizeof(t_pixel));
     if(!nueva)
     {
-        printf("Error: Falló la asignación de memoria para crear la matriz.\n");
-        return 0;
+        printf("Error: FallÃ³ la asignaciÃ³n de memoria para crear la matriz.\n");
+        return NULL;
     }
 
     //Recorremos cada pixel
-    for(int i = 0; i<alto; i++)
+    for(int i = 0; i < alto; i++)
     {
-        for(int j = 0; j<ancho; j++)
+        for(int j = 0; j < ancho; j++)
         {
             int sumaB = 0, sumaG = 0, sumaR = 0, cantidad = 0;
 
@@ -171,20 +170,19 @@ int comodinBlur(t_pixel** mat, int alto, int ancho)
                     // Solo vecinos que existen (limites en bordes y esquinas)
                     if(ni >= 0 && ni < alto && nj >= 0 && nj < ancho)
                     {
-                        sumaB += nueva[ni][nj].pixel[AZUL];
-                        sumaG += nueva[ni][nj].pixel[VERDE];
-                        sumaR += nueva[ni][nj].pixel[ROJO];
+                        sumaB += mat[ni][nj].pixel[AZUL];
+                        sumaG += mat[ni][nj].pixel[VERDE];
+                        sumaR += mat[ni][nj].pixel[ROJO];
                         cantidad++;
                     }
                 }
             }
 
-            mat[i][j].pixel[AZUL]  = limitarColor(sumaB / cantidad);
-            mat[i][j].pixel[VERDE] = limitarColor(sumaG / cantidad);
-            mat[i][j].pixel[ROJO]  = limitarColor(sumaR / cantidad);
+            nueva[i][j].pixel[AZUL]  = limitarColor(sumaB / cantidad);
+            nueva[i][j].pixel[VERDE] = limitarColor(sumaG / cantidad);
+            nueva[i][j].pixel[ROJO]  = limitarColor(sumaR / cantidad);
         }
     }
 
-    liberarMatriz(nueva, alto);
-    return 1;
+    return nueva;
 }

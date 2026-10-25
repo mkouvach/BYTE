@@ -1,26 +1,26 @@
 /*
-    Integrantes del grupo. En caso de ser un grupo de dos integrantes, no completar el último campo.
+    Integrantes del grupo. En caso de ser un grupo de dos integrantes, no completar el ultimo campo.
     Si alguno de los integrantes del grupo dejara la materia, completar de todos modos sus datos, aclarando que no entrega.
     -----------------
     Apellido: Alvarez da Silva
     Nombre: Keila
     DNI: 45236512
-    Entrega: Sí
+    Entrega: Si
     -----------------
     Apellido: Espinoza
     Nombre: Nahuel
     DNI: 34738657
-    Entrega: Sí
+    Entrega: No
     -----------------
     Apellido: Kouvach
-    Nombre: Marcos Andrés
+    Nombre: Marcos
     DNI: 45013925
-    Entrega: Sí
+    Entrega: Si
     -----------------
     Apellido: Rodriguez
     Nombre: Lautaro David
     DNI: 45349281
-    Entrega: Sí
+    Entrega: Si
     -----------------
 */
 #include "funciones_grupo.h"
@@ -57,7 +57,6 @@ int solucion(int argc, char *argv[])
     //Ejecucion de filtros
 
     //GRUPO A: Filtros que mantienen las dimensiones originales
-
 
     if(config.negativo == 1)
     {
@@ -211,7 +210,7 @@ int solucion(int argc, char *argv[])
 
         if(copia != NULL)
         {
-            aumentarContraste(copia, infoMeta.alto, infoMeta.ancho, config.reducirContraste);
+            reducirContraste(copia, infoMeta.alto, infoMeta.ancho, config.reducirContraste);
 
             sprintf(nombreSalida, "BYTE_reducir-contraste_%s.bmp", nombreBase); //Generamos nombre archivo salida
 
@@ -282,6 +281,7 @@ int solucion(int argc, char *argv[])
     if (config.achicar != -1)
     {
         t_metadata metaNueva;
+
         t_pixel** matNueva = achicarImagen(mat, &infoMeta, &metaNueva, config.achicar);
 
         if (matNueva != NULL)
@@ -296,7 +296,7 @@ int solucion(int argc, char *argv[])
         }
     }
 
-    // --- GRUPO C: Filtros que reciben dos imágenes (Concatenar)
+    // --- GRUPO C: Filtros que reciben dos imÃ¡genes (Concatenar)
 
     if(config.concatenarHorizontal == 1 || config.concatenarVertical == 1)
     {
@@ -356,11 +356,26 @@ int solucion(int argc, char *argv[])
             }
         }
     }
-    //FALTA FILTRO COMODIN
+
+    if(config.comodin == 1)
+    {
+        t_pixel **matNueva = comodinBlur(mat, infoMeta.alto, infoMeta.ancho);
+
+        if(matNueva != NULL)
+        {
+            sprintf(nombreSalida, "BYTE_comodin_%s.bmp", nombreBase); //Generamos nombre archivo salida
+
+            escribirBmp(nombreSalida, &infoMeta, matNueva);
+
+            liberarMatriz(matNueva, infoMeta.alto);
+
+            printf("Imagen con filtro comodin generada con exito.\n");
+        }
+    }
 
     //Liberamos matriz original
 
     liberarMatriz(mat, infoMeta.alto);
 
-    return 1;
+    return 0;
 }

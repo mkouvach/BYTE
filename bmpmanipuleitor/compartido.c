@@ -1,21 +1,23 @@
 #include "compartido.h"
 
-
-void liberarMatriz(t_pixel **mat, size_t cf)
+void liberarMatriz(void *mat, size_t cf)
 {
-    if(mat == NULL) return; // <-- Evita crasheos si la matriz no se creó
+    if(mat == NULL)
+        return;
 
-    for(int i=0; i<cf; i++)
+    void **m = (void**)mat;
+
+    for(size_t i = 0; i < cf; i++)
     {
-        free(*(mat + i));
+        free(*(m + i));
     }
 
     free(mat);
 }
 
-t_pixel **crearMatrizDinamica(size_t cf, size_t cc)
+void **crearMatrizDinamica(size_t cf, size_t cc, size_t tamElem)
 {
-    t_pixel **mat = (t_pixel**)malloc(cf* sizeof(t_pixel *)); //Reserva vector de punteros
+    void **mat = (void**)malloc(cf * sizeof(void *)); //Reserva vector de punteros
 
     if(!mat)
     {
@@ -23,9 +25,9 @@ t_pixel **crearMatrizDinamica(size_t cf, size_t cc)
         return NULL;
     }
 
-    for(int i = 0; i<cf; i++) //Recorremos cada fila
+    for(size_t i = 0; i < cf; i++) //Recorremos cada fila
     {
-        *(mat + i) = (t_pixel*)malloc(cc * sizeof(t_pixel)); //Reserva vector columna
+        *(mat + i) = malloc(cc * tamElem); //Reserva vector columna
 
         if(!*(mat + i))
         {
@@ -34,12 +36,11 @@ t_pixel **crearMatrizDinamica(size_t cf, size_t cc)
         }
     }
     return mat;
-
 }
 
 t_pixel ** clonarMatriz(t_pixel **mat, size_t cf, size_t cc)
 {
-    t_pixel **copia = crearMatrizDinamica(cf, cc); //Reservamos memoria para clonar
+    t_pixel **copia = (t_pixel**)crearMatrizDinamica(cf, cc, sizeof(t_pixel)); //Reservamos memoria para clonar
 
     if(!copia)
     {
@@ -47,12 +48,11 @@ t_pixel ** clonarMatriz(t_pixel **mat, size_t cf, size_t cc)
         return NULL;
     }
 
-    for(int i = 0; i<cf; i++)
+    for(size_t i = 0; i < cf; i++)
     {
-        for(int j = 0; j<cc; j++)
+        for(size_t j = 0; j < cc; j++)
         {
             copia[i][j] = mat[i][j]; //Copiamos contenido
-
         }
     }
 
@@ -91,7 +91,7 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
 
     if (tipo[0] != 'B' || tipo[1] != 'M')
     {
-        printf("El archivo no es un BMP válido.\n");
+        printf("El archivo no es un BMP valido.\n");
         fclose(bmp);
         return 0;
     }
@@ -114,7 +114,7 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
     //Alto
     fread(&(infoBmp->alto), sizeof(unsigned int), 1, bmp);
 
-    //Número de planos
+    //Numero de planos
     fseek(bmp, 2, SEEK_CUR); //Los avanzamos sin guardar nada (los ignoramos)
 
     //Profundidad (tamaño de cada punto)
@@ -123,7 +123,7 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
     //Validamos que la profundidad sea de 24 bits
     if(infoBmp->profundidad != 24)
     {
-        printf("Profundidad inválida. Solo se admiten imagenes de 24 bits.\n");
+        printf("Profundidad invalida. Solo se admiten imagenes de 24 bits.\n");
         fclose(bmp);
         return 0;
     }
@@ -131,8 +131,8 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
     //Nos posicionamos donde arrancan los pixeles (tamEncabezado)
     fseek(bmp, infoBmp->tamEncabezado, SEEK_SET);
 
-    //Creamos la matriz dinámica de pixeles
-    *imagen = crearMatrizDinamica(infoBmp->alto, infoBmp->ancho);
+    //Creamos la matriz dinamica de pixeles
+    *imagen = (t_pixel**)crearMatrizDinamica(infoBmp->alto, infoBmp->ancho, sizeof(t_pixel));
     if(!*imagen)
     {
         fclose(bmp);
@@ -143,7 +143,7 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
     int padding = calcularPadding(infoBmp->ancho);
 
     //Leemos la matriz de pixeles
-    for(int i = 0; i < infoBmp->alto; i++)
+    for(unsigned int i = 0; i < infoBmp->alto; i++)
     {
         fread(*((*imagen) + i), sizeof(t_pixel), infoBmp->ancho, bmp);
 
@@ -156,7 +156,7 @@ int leerBmp(const char* ruta, t_metadata* infoBmp, t_pixel*** imagen)
     }
 
     fclose(bmp);
-    return 1; //Se leyó correctamente la imagen
+    return 1; //Se leyo correctamente la imagen
 
 }
 
@@ -207,7 +207,7 @@ int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
     //Alto
     fwrite(&(infoBmp->alto), sizeof(unsigned int), 1, bmp);
 
-    //Número de planos
+    //Numero de planos
     unsigned short planos = 1;
     fwrite(&planos, sizeof(unsigned short), 1, bmp);
 
@@ -229,7 +229,7 @@ int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
     //Definimos los pixeles
     unsigned char relleno[3] = {0,0,0};
 
-    for(int i = 0; i < infoBmp->alto; i++)
+    for(unsigned int i = 0; i < infoBmp->alto; i++)
     {
         //Escribimos todos los pixeles de una fila en una sola lectura
         fwrite(*(imagen + i), sizeof(t_pixel), infoBmp->ancho, bmp);
@@ -241,7 +241,7 @@ int escribirBmp(const char* ruta, t_metadata* infoBmp, t_pixel** imagen)
         }
     }
     fclose(bmp);
-    return 1; //Se escribió correctamente la imagen
+    return 1; //Se escribio correctamente la imagen
 }
 
 unsigned char limitarColor(int num)
@@ -259,7 +259,7 @@ void inicializarMetadata(t_metadata* meta, unsigned int ancho, unsigned int alto
     meta->alto = alto;
     meta->profundidad = 24;
     meta->tamEncabezado = 54;
-    meta->tamArchivo = 54 + (ancho * 3 * calcularPadding(ancho)) * alto;
+    meta->tamArchivo = 54 + (ancho * sizeof(t_pixel) + calcularPadding(ancho)) * alto;
 }
 
 //Inicializa estructura t_config
@@ -294,6 +294,45 @@ void inicializarConfig(t_config* config)
 }
 
 //Limpia la ruta de la imagen
+
+int esPorcentajeValido(const char* texto, int* valorSalida)
+{
+    //Validamos cadena vacia
+
+    if (texto == NULL || *texto == '\0')
+    {
+        return 0; // Invalido
+    }
+
+    // Descartamos todo lo que no sea un numero
+
+    const char* p = texto;
+
+    while (*p)
+    {
+        if (*p < '0' || *p > '9')
+        {
+            return 0; // Encontro algo que no es un numero
+        }
+
+        p++;
+    }
+
+    //Convierte a numero
+
+    int num = atoi(texto);
+
+    if (num < 0 || num > 100)
+    {
+        return 0; // Fuera de rango
+    }
+
+    // Asignamos valor
+
+    *valorSalida = num;
+
+    return 1;
+}
 
 void extraerNombreBase(const char *ruta, char *destino)
 {
@@ -331,6 +370,7 @@ int parsearArgumentos(int argc, char *argv[], t_config *config)
         char *pArgv = *(argv+i);
 
         // Preguntamos si es una ruta de imagen, es decir, que no arranquen en "--"
+
         if(*pArgv != '-' || *(pArgv+1) != '-')
         {
 
@@ -353,15 +393,20 @@ int parsearArgumentos(int argc, char *argv[], t_config *config)
         else
         {
             //Arranca con "--"
+
             char *igual = strchr(pArgv, '=');
 
             if(igual != NULL)
             {
                 //Es un filtro de porcentaje
 
-                int valor = atoi(igual + 1);
+                int valor=0;
 
-                if(valor >= 0 && valor <= 100) //Validamos rango porcentaje
+                if(!esPorcentajeValido(igual+1,&valor))
+                {
+                    printf("Porcentaje invalido. Debe ser un numero entero entre 0 y 100.\n");
+                }
+                else
                 {
 
                     if (strncmp(pArgv, "--aumentar-contraste=", 21) == 0)
@@ -396,9 +441,8 @@ int parsearArgumentos(int argc, char *argv[], t_config *config)
                     {
                         printf("Argumento %s no reconocido.\n",pArgv);
                     }
+
                 }
-
-
 
             }
             else

@@ -34,13 +34,13 @@ typedef struct
 
 typedef struct
 {
-    // Rutas de las imágenes
+    // Rutas de las imÃ¡genes
 
     char rutaImg1[256];
     char rutaImg2[256];
     int cantImagenes;
 
-    // Filtros sin parámetros (0 = no solicitado, 1 = solicitado)
+    // Filtros sin parÃ¡metros (0 = no solicitado, 1 = solicitado)
     int negativo;
     int escalaGrises;
     int espejarHorizontal;
@@ -63,8 +63,8 @@ typedef struct
 } t_config;
 
 
-void liberarMatriz(t_pixel **mat, size_t cf);
-t_pixel **crearMatrizDinamica(size_t cf, size_t cc);
+void liberarMatriz(void *mat, size_t cf);
+void **crearMatrizDinamica(size_t cf, size_t cc, size_t tamElem);
 t_pixel **clonarMatriz(t_pixel **mat,size_t cf, size_t cc);
 
 int calcularPadding(int ancho);
@@ -75,6 +75,7 @@ void inicializarMetadata(t_metadata* meta, unsigned int ancho, unsigned int alto
 void inicializarConfig(t_config* config);
 void extraerNombreBase(const char *ruta, char *destino);
 int parsearArgumentos(int argc, char *argv [], t_config *config);
+int esPorcentajeValido(const char* texto, int* valorSalida);
 
 
 

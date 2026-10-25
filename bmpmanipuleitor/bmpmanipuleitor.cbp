@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters=" imagenes_prueba/canilla.bmp imagenes_prueba/unlam.bmp --concatenar-horizontal --concatenar-vertical" />
+				<Option parameters=" imagenes_prueba/TablaFAT.png    --negativo=2342342 " />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>

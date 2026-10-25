@@ -20,7 +20,7 @@ void negativo(t_pixel **mat, int alto, int ancho)
 //TONALIDAD ROJA (PORCENTAJE)
 void tonalidadRoja(t_pixel **mat, int alto, int ancho, int porcentaje)
 {
-    float factor = 1 + porcentaje / 100;
+    float factor = 1.0f + (float)porcentaje / 100.0f;
     int aux;
 
     for(int i = 0; i<alto; i++)
@@ -36,7 +36,7 @@ void tonalidadRoja(t_pixel **mat, int alto, int ancho, int porcentaje)
 //TONALIDAD VERDE (PORCENTAJE)
 void tonalidadVerde(t_pixel **mat, int alto, int ancho, int porcentaje)
 {
-    float factor = 1 + porcentaje / 100;
+    float factor = 1.0f + (float)porcentaje / 100.0f;
     int aux;
 
     for(int i = 0; i<alto; i++)
@@ -53,7 +53,7 @@ void tonalidadVerde(t_pixel **mat, int alto, int ancho, int porcentaje)
 //TONALIDAD AZUL (PORCENTAJE)
 void tonalidadAzul(t_pixel **mat, int alto, int ancho, int porcentaje)
 {
-    float factor = 1 + porcentaje / 100;
+    float factor = 1.0f + (float)porcentaje / 100.0f;
     int aux;
 
     for(int i = 0; i<alto; i++)

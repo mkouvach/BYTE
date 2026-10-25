@@ -4,7 +4,8 @@
 //ESCALA DE GRISES
 void escalaDeGrises(t_pixel **mat, int alto, int ancho)
 {
-    int i, j, suma = 0, prom = 0;
+    int i, j, suma = 0;
+    float prom=0;
 
     for(i=0; i<alto; i++)
     {
