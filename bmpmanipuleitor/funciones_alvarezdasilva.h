@@ -9,6 +9,6 @@ void copiarImagen(t_pixel** destino, t_pixel** origen, unsigned int alto, unsign
 t_pixel** achicarImagen(t_pixel** matOrig, const t_metadata* metaOrig, t_metadata* metaNueva, int porcentaje);
 t_pixel** concatenarHorizontal(t_pixel** mat1, const t_metadata* meta1, t_pixel** mat2, const t_metadata* meta2, t_metadata* metaNueva);
 t_pixel** concatenarVertical(t_pixel** mat1, const t_metadata* meta1, t_pixel** mat2, const t_metadata* meta2, t_metadata* metaNueva);
-
+int comodinBlur(t_pixel** mat, int alto, int ancho);
 
 #endif // FUNCIONES_ALVAREZDASILVA_H_INCLUDED

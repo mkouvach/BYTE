@@ -23,7 +23,7 @@ t_pixel **crearMatrizDinamica(size_t cf, size_t cc)
         return NULL;
     }
 
-    for(int i=0; i<cf; i++) //Recorremos cada fila
+    for(int i = 0; i<cf; i++) //Recorremos cada fila
     {
         *(mat + i) = (t_pixel*)malloc(cc * sizeof(t_pixel)); //Reserva vector columna
 
@@ -37,9 +37,9 @@ t_pixel **crearMatrizDinamica(size_t cf, size_t cc)
 
 }
 
-t_pixel ** clonarMatriz(t_pixel **mat,size_t cf, size_t cc)
+t_pixel ** clonarMatriz(t_pixel **mat, size_t cf, size_t cc)
 {
-    t_pixel **copia=crearMatrizDinamica(cf,cc); //Reservamos memoria para clonar
+    t_pixel **copia = crearMatrizDinamica(cf, cc); //Reservamos memoria para clonar
 
     if(!copia)
     {
@@ -47,11 +47,11 @@ t_pixel ** clonarMatriz(t_pixel **mat,size_t cf, size_t cc)
         return NULL;
     }
 
-    for(int i=0; i<cf; i++)
+    for(int i = 0; i<cf; i++)
     {
-        for(int j=0; j<cc; j++)
+        for(int j = 0; j<cc; j++)
         {
-            copia[i][j]=mat[i][j]; //Copiamos contenido
+            copia[i][j] = mat[i][j]; //Copiamos contenido
 
         }
     }
@@ -326,40 +326,40 @@ void extraerNombreBase(const char *ruta, char *destino)
 
 int parsearArgumentos(int argc, char *argv[], t_config *config)
 {
-    for(int i=1; i<argc; i++)
+    for(int i = 1; i<argc; i++)
     {
         char *pArgv = *(argv+i);
 
         // Preguntamos si es una ruta de imagen, es decir, que no arranquen en "--"
-        if(*pArgv!='-'||*(pArgv+1)!='-')
+        if(*pArgv != '-' || *(pArgv+1) != '-')
         {
 
             //Es una ruta de imagen
-            if(config->cantImagenes==0)
+            if(config->cantImagenes == 0)
             {
-                strcpy(config->rutaImg1,pArgv);
+                strcpy(config->rutaImg1, pArgv);
                 config->cantImagenes++;
             }
-            else if(config->cantImagenes==1)
+            else if(config->cantImagenes == 1)
             {
-                strcpy(config->rutaImg2,pArgv);
+                strcpy(config->rutaImg2, pArgv);
                 config->cantImagenes++;
             }
             else
             {
-                printf("Limite de imagenes superado, la imagen %s sera ignorada.\n",pArgv);
+                printf("Limite de imagenes superado, la imagen %s sera ignorada.\n", pArgv);
             }
         }
         else
         {
             //Arranca con "--"
-            char *igual=strchr(pArgv,'=');
+            char *igual = strchr(pArgv, '=');
 
-            if(igual!=NULL)
+            if(igual != NULL)
             {
                 //Es un filtro de porcentaje
 
-                int valor=atoi(igual+1);
+                int valor = atoi(igual + 1);
 
                 if(valor >= 0 && valor <= 100) //Validamos rango porcentaje
                 {
@@ -405,31 +405,31 @@ int parsearArgumentos(int argc, char *argv[], t_config *config)
             {
                 //Es un filtro simple
 
-                if(strcmp(pArgv,"--negativo")==0)
+                if(strcmp(pArgv,"--negativo") == 0)
                 {
                     config->negativo = 1;
                 }
-                else if(strcmp(pArgv,"--escala-de-grises")==0)
+                else if(strcmp(pArgv,"--escala-de-grises") == 0)
                 {
                     config->escalaGrises = 1;
                 }
-                else if(strcmp(pArgv,"--espejar-horizontal")==0)
+                else if(strcmp(pArgv,"--espejar-horizontal") == 0)
                 {
                     config->espejarHorizontal = 1;
                 }
-                else if(strcmp(pArgv,"--espejar-vertical")==0)
+                else if(strcmp(pArgv,"--espejar-vertical") == 0)
                 {
                     config->espejarVertical = 1;
                 }
-                else if(strcmp(pArgv,"--rotar-derecha")==0)
+                else if(strcmp(pArgv,"--rotar-derecha") == 0)
                 {
                     config->rotarDerecha = 1;
                 }
-                else if(strcmp(pArgv,"--rotar-izquierda")==0)
+                else if(strcmp(pArgv,"--rotar-izquierda") == 0)
                 {
                     config->rotarIzquierda = 1;
                 }
-                else if(strcmp(pArgv,"--concatenar-horizontal")==0)
+                else if(strcmp(pArgv,"--concatenar-horizontal") == 0)
                 {
                     config->concatenarHorizontal = 1;
                 }
@@ -437,14 +437,14 @@ int parsearArgumentos(int argc, char *argv[], t_config *config)
                 {
                     config->concatenarVertical = 1;
                 }
-                else if(strcmp(pArgv,"--comodin")==0)
+                else if(strcmp(pArgv,"--comodin") == 0)
                 {
                     config->comodin = 1;
                 }
 
                 else
                 {
-                    printf("Argumento %s no reconocido.\n",pArgv);
+                    printf("Argumento %s no reconocido.\n", pArgv);
                 }
 
             }
@@ -456,7 +456,7 @@ int parsearArgumentos(int argc, char *argv[], t_config *config)
 
     //Validamos que exista al menos una imagen
 
-    if(config->cantImagenes==0)
+    if(config->cantImagenes == 0)
     {
         printf("No se cargo ningun archivo BMP.\n");
         return 0;

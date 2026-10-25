@@ -143,3 +143,48 @@ t_pixel** concatenarVertical(t_pixel** mat1, const t_metadata* meta1, t_pixel** 
 }
 
 //COMODIN
+//BLUR (promedio de vecindario 3x3)
+int comodinBlur(t_pixel** mat, int alto, int ancho)
+{
+    t_pixel** nueva = clonarMatriz(mat, alto, ancho);
+    if(!nueva)
+    {
+        printf("Error: Falló la asignación de memoria para crear la matriz.\n");
+        return 0;
+    }
+
+    //Recorremos cada pixel
+    for(int i = 0; i<alto; i++)
+    {
+        for(int j = 0; j<ancho; j++)
+        {
+            int sumaB = 0, sumaG = 0, sumaR = 0, cantidad = 0;
+
+            //Recorremos la ventana 3x3 alrededor de (i, j)
+            for(int di = -1; di <= 1; di++)
+            {
+                for(int dj = -1; dj <= 1; dj++)
+                {
+                    int ni = i + di;
+                    int nj = j + dj;
+
+                    // Solo vecinos que existen (limites en bordes y esquinas)
+                    if(ni >= 0 && ni < alto && nj >= 0 && nj < ancho)
+                    {
+                        sumaB += nueva[ni][nj].pixel[AZUL];
+                        sumaG += nueva[ni][nj].pixel[VERDE];
+                        sumaR += nueva[ni][nj].pixel[ROJO];
+                        cantidad++;
+                    }
+                }
+            }
+
+            mat[i][j].pixel[AZUL]  = limitarColor(sumaB / cantidad);
+            mat[i][j].pixel[VERDE] = limitarColor(sumaG / cantidad);
+            mat[i][j].pixel[ROJO]  = limitarColor(sumaR / cantidad);
+        }
+    }
+
+    liberarMatriz(nueva, alto);
+    return 1;
+}
